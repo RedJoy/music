@@ -1,0 +1,17 @@
+{
+    "remotePath": "/srv/wwwroot/rj.vms.com",
+    "host": "192.168.28.128",
+    "username": "root",
+    "password": "toor",
+    "port": 22,
+    "protocol": "sftp",
+    "uploadOnSave": true,
+    "passive": false,
+    "debug": false,
+    "privateKeyPath": null,
+    "ignore": [
+        "\\.vscode",
+        "\\.svn",
+        "\\.git"
+    ]
+}

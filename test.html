@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>API 测试</title>
+    <script src="http://lib.sinaapp.com/js/jquery/1.9.1/jquery-1.9.1.min.js"></script>
+    <style>.hidden{display: none}</style>
+</head>
+<body>
+    <nav>
+        <a href="#register">注册测试</a>
+        <a href="#login">登陆测试</a>
+        <a href="#logout" id="logout-link">退出测试</a>
+        <a href="#info" id="info-link">登陆信息</a>
+        <a href="#rest">API TEST</a>
+    </nav>
+    <hr>
+    <div id="register" class="hidden">
+        <p><label for="">username：</label><input name="username" id="r-username" type="text"></p>
+        <p><label for="">password：</label><input name="password" id="r-password" type="password"></p>
+        <p><label for="">confirm ：</label><input name="pwdconfm" id="r-pwdconfm" type="password"></p>
+        <p><input id="register-btn" type="button" value="注册"></p>
+    </div>
+    <div id="login" class="hidden">
+        <p><label for="">username：</label><input name="username" id="username" type="text"></p>
+        <p><label for="">password：</label><input name="password" id="password" type="password"></p>
+        <p><input id="login-btn" type="button" value="登录"></p>
+    </div>
+    <div id="logout" class="hidden">
+        <p class="res"></p>
+    </div>
+    <div id="info" class="hidden">
+        <p class="res"></p>
+    </div>
+    <div id="rest" class="hidden">
+        <p>
+            <select name="rest-method" id="rest-method">
+                <option value="GET">GET</option>
+                <option value="POST">POST</option>
+                <option value="PUT">PUT</option>
+                <option value="DELETE">DELETE</option>
+            </select>
+            <input type="text" id="rest-uri" /> &nbsp; <input type="button" value="请求" id="rest-action">
+        </p>
+        <p id="rest-uri-response"></p>
+    </div>
+</body>
+<script type="text/javascript">
+var Q = {};
+Q.APIROOT = 'server.php';
+Q.APIURIS = {
+    login:    Q.APIROOT + '/login', 
+    register: Q.APIROOT + '/register', 
+    logout:   Q.APIROOT + '/logout', 
+    info:     Q.APIROOT + '/info'
+};
+
+// init page
+~ function(){
+    $.getJSON(Q.APIURIS.info, function(res){
+        console.log(res);
+    }, function() {
+        console.error('failed');
+    });
+}();
+
+$('nav a').click(function(){
+    name = $(this).attr('href').replace('#','');
+    $('.hidden').hide();
+    $('#' + name).show();
+});
+
+// register action
+$('#register-btn').click(function(){
+    var params = {
+        username : $('#r-username').val(), 
+        password : $('#r-password').val(), 
+        pwdconfm : $('#r-pwdconfm').val()
+    };
+    $.post(Q.APIURIS.register, params, function(res){
+        console.log(res);
+    }, function() {
+        console.error('failed');
+    }, 'json');
+});
+
+// login action
+$('#login-btn').click(function(){
+    var params = {
+        username : $('#username').val(), 
+        password : $('#password').val() 
+    };
+    $.post(Q.APIURIS.login, params, function(res){
+        console.log(res);
+    }, function() {
+        console.error('failed');
+    }, 'json');
+});
+
+// logout action
+$('#logout-link').click(function(){
+    $.getJSON(Q.APIURIS.logout, function(res){
+        console.log(res);
+    }, function() {
+        console.error('failed');
+    });
+});
+
+// userinfo action
+$('#info-link').click(function(){
+    $.getJSON(Q.APIURIS.info, function(res){
+        console.log(res);
+    }, function() {
+        console.error('failed');
+    });
+});
+
+$('#rest-action').click(function(){
+    uri = $('#rest-uri').val();
+    $.get(Q.APIROOT + uri, function(res){
+        var json = displayJSON(res);
+        $('#rest-uri-response').html(json);
+        // console.log(res);
+    }, function(){
+        console.error('failed');
+    }, 'text');
+});
+
+// 页面显示JOSN返回结果
+function displayJSON(str) {
+    if ( ! str || 'string' !== typeof str) return '';
+    
+    try {
+        str = eval("'" + str + "'"); // 转换unicode
+    } catch (exception) {
+        return str; // not evalable ,return oringinal text
+    }
+    var indent = '', strlen = str.length, outputString = '';
+    
+    for (var i = 0;i < strlen;i++) 
+    {
+        char = str[i], nchar = str[i+1], outputString += char; // 当前字符，下一个字符，输出内容
+        
+        if (char == '{' || char == '[') {
+            indent += '    ';
+            outputString += "\n" + indent; // 换行，缩进
+        } else if (char == ',') {
+            outputString += "\n" + indent; // 换行，缩进
+        }
+        
+        if (nchar == '}' || nchar == ']') {
+            indent = indent.substr(4);
+            outputString += "\n" + indent; // 换行，去缩进
+        }
+    }
+    
+    return '<pre>' + outputString + '</pre>';
+}
+</script>
+</html>
