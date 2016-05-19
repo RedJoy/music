@@ -1,1 +1,459 @@
-wowoowowo
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0">
+	<title>音乐播放器</title>
+	<link rel="shortcut icon" href="imgs/color-icon.ico">
+	<link rel="stylesheet" type="text/css" href="sass/index.css">
+	<!-- <script src="http://libs.baidu.com/jquery/1.9.1/jquery.js"></script> -->
+	<script src="src/js/jquery-1.11.2.min.js"></script>
+	<script src="src/js/data.js"></script>
+	<script src="src/js/index.js"></script>
+</head>
+	</head>
+<body>
+	<!--头部导航条-->
+	<header>
+		<div class="header-wrap clrfix">
+			<nav class="clrfix">
+				<div class="logo"></div>
+				<ul class="clrfix">
+					<li class="active"><a href="javascript:;" data-icon='0'>首页</a></li>
+					<li><a href="javascript:;" data-icon='1'>发现音乐</a></li>
+					<li><a href="javascript:;" data-icon='2'>我的音乐</a></li>
+					<li><a href="javascript:;" data-icon='3'>我的收藏</a></li>
+				</ul>
+			</nav>
+			<a href="javascript:0;" class="login-btn r" id="js-login">登录</a>
+			<div class="search-box">
+				<input type="text" class="search">
+				<!-- <label for="">歌曲/</label> -->
+			</div>
+
+		</div>
+	</header>
+	<!-- 头部导航条end -->
+
+	<!-- 主面板 -->
+	<div class="main-box">
+		<!-- 首页 -->
+		<section class="panel index clrfix" id="index" data-icon="0">
+			<div class="modal-backdrop modal-backdrops"></div>
+			<div class="turning_box">
+				<div class="recomment_turning clrfix">
+					<a href="javascript:;" class="banner-slide top1">
+						<img src="src/imgs/turning1.png">
+					</a>
+					<a href="javascript:;" class="banner-slide top2">
+						<img src="src/imgs/turning2.png">
+					</a>
+					<a href="javascript:;" class="banner-slide top3">
+						<img src="src/imgs/turning3.png">
+					</a>
+					<a href="javascript:;" class="banner-slide top4">
+						<img src="src/imgs/turning4.png">
+					</a>
+				</div>
+				<div class="banner-dots"></div>
+				<!-- <a href="javascript:;" class="banner-anchor prev">上一张</a>
+				<a href="javascript:;" class="banner-anchor next">下一张</a> -->
+  			</div>
+			<div class="music_recomment">
+				<h2>推荐歌单</h2>
+				<div class="music_list clrfix">
+				</div>
+			</div>
+			
+		</section>
+		<!-- 首页end -->
+
+
+		<!-- 发现音乐 -->
+		<section class="panel music_list clrfix" id="music_list" data-icon="1">
+		</section>
+		<!-- 发现音乐 end -->
+
+		<!-- 我的音乐 -->
+		<section class="panel my_music color" id="my_music" data-icon="2">
+
+			<div class="u_title clrfix">
+				<h3 class='l'>歌曲列表</h3>
+				<span class="sub l">
+					<span id="flag_trackCount">12</span>
+					首歌
+				</span>
+			</div>
+			<div class="u_title_list">
+				<table class="m_table" cellpadding="0" cellspacing="0">
+					<tbody>
+						<tr>
+							<td class="m_list_num"><span >1</span></td>
+							<td class="music_name"><div>Teenage Dream</div></td>
+							<td class="music_singer"><div>Katy Perry </div></td>
+							<td class="plays"><div class='play'></div></td>
+							<!-- <td class="adds"><div class="add"></div></td> -->
+							<td class="collects"><div class="heart"></div></td>
+							<td class="dels"><div class="del">-</div></td>
+						</tr>
+						<tr>
+							<td class="m_list_num"><span >1</span></td>
+							<td class="music_name"><div>Teenage Dream</div></td>
+							<td class="music_singer"><div>Katy Perry </div></td>
+							<td class="plays"><div class='play'></div></td>
+							<!-- <td class="adds"><div class="add"></div></td> -->
+							<td class="collects"><div class="heart"></div></td>
+							<td class="dels"><div class="del">-</div></td>
+						</tr>
+						<tr>
+							<td class="m_list_num"><span >1</span></td>
+							<td class="music_name"><div>Teenage Dream</div></td>
+							<td class="music_singer"><div>Katy Perry </div></td>
+							<td class="plays"><div class='play'></div></td>
+							<!-- <td class="adds"><div class="add"></div></td> -->
+							<td class="collects"><div class="heart"></div></td>
+							<td class="dels"><div class="del">-</div></td>
+						</tr>
+						<tr>
+							<td class="m_list_num"><span >1</span></td>
+							<td class="music_name"><div>Teenage Dream</div></td>
+							<td class="music_singer"><div>Katy Perry </div></td>
+							<td class="plays"><div class='play'></div></td>
+							<!-- <td class="adds"><div class="add"></div></td> -->
+							<td class="collects"><div class="heart"></div></td>
+							<td class="dels"><div class="del">-</div></td>
+						</tr>
+						<tr>
+							<td class="m_list_num"><span >1</span></td>
+							<td class="music_name"><div>Teenage Dream</div></td>
+							<td class="music_singer"><div>Katy Perry </div></td>
+							<td class="plays"><div class='play'></div></td>
+							<!-- <td class="adds"><div class="add"></div></td> -->
+							<td class="collects"><div class="heart"></div></td>
+							<td class="dels"><div class="del">-</div></td>
+						</tr>
+						<tr>
+							<td class="m_list_num"><span >1</span></td>
+							<td class="music_name"><div>Teenage Dream</div></td>
+							<td class="music_singer"><div>Katy Perry </div></td>
+							<td class="plays"><div class='play'></div></td>
+							<!-- <td class="adds"><div class="add"></div></td> -->
+							<td class="collects"><div class="heart"></div></td>
+							<td class="dels"><div class="del">-</div></td>
+						</tr>
+						<tr>
+							<td class="m_list_num"><span >1</span></td>
+							<td class="music_name"><div>Teenage Dream</div></td>
+							<td class="music_singer"><div>Katy Perry </div></td>
+							<td class="plays"><div class='play'></div></td>
+							<!-- <td class="adds"><div class="add"></div></td> -->
+							<td class="collects"><div class="heart"></div></td>
+							<td class="dels"><div class="del">-</div></td>
+						</tr>
+						<tr>
+							<td class="m_list_num"><span >1</span></td>
+							<td class="music_name"><div>Teenage Dream</div></td>
+							<td class="music_singer"><div>Katy Perry </div></td>
+							<td class="plays"><div class='play'></div></td>
+							<!-- <td class="adds"><div class="add"></div></td> -->
+							<td class="collects"><div class="heart"></div></td>
+							<td class="dels"><div class="del">-</div></td>
+						</tr>
+						<tr>
+							<td class="m_list_num"><span >1</span></td>
+							<td class="music_name"><div>Teenage Dream</div></td>
+							<td class="music_singer"><div>Katy Perry </div></td>
+							<td class="plays"><div class='play'></div></td>
+							<!-- <td class="adds"><div class="add"></div></td> -->
+							<td class="collects"><div class="heart"></div></td>
+							<td class="dels"><div class="del">-</div></td>
+						</tr>
+						<tr>
+							<td class="m_list_num"><span >1</span></td>
+							<td class="music_name"><div>Teenage Dream</div></td>
+							<td class="music_singer"><div>Katy Perry </div></td>
+							<td class="plays"><div class='play'></div></td>
+							<!-- <td class="adds"><div class="add"></div></td> -->
+							<td class="collects"><div class="heart"></div></td>
+							<td class="dels"><div class="del">-</div></td>
+						</tr>
+						<tr>
+							<td class="m_list_num"><span >1</span></td>
+							<td class="music_name"><div>Teenage Dream</div></td>
+							<td class="music_singer"><div>Katy Perry </div></td>
+							<td class="plays"><div class='play'></div></td>
+							<!-- <td class="adds"><div class="add"></div></td> -->
+							<td class="collects"><div class="heart"></div></td>
+							<td class="dels"><div class="del">-</div></td>
+						</tr>
+						<tr>
+							<td class="m_list_num"><span >1</span></td>
+							<td class="music_name"><div>Teenage Dream</div></td>
+							<td class="music_singer"><div>Katy Perry </div></td>
+							<td class="plays"><div class='play'></div></td>
+							<!-- <td class="adds"><div class="add"></div></td> -->
+							<td class="collects"><div class="heart"></div></td>
+							<td class="dels"><div class="del">-</div></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</section>
+		<!-- 我的音乐 end -->
+
+		<!-- 我的收藏 -->
+		<section class="panel my_collect" id="my_collect" data-icon="3">
+
+			<div class="u_title clrfix">
+				<h3 class='l'>我的收藏</h3>
+				<span class="sub l">
+					<span id="flag_trackCount">16</span>
+					首歌
+				</span>
+			</div>
+			<div class="u_title_list">
+				<table class="m_table" cellpadding="0" cellspacing="0">
+					<tbody>
+						<tr>
+							<td class="m_list_num"><span >1</span></td>
+							<td class="music_name"><div>Teenage Dream</div></td>
+							<td class="music_singer"><div>Katy Perry </div></td>
+							<td class="plays"><div class='play'></div></td>
+							<td class="collects"><div class="collect"></div></td>
+							<td class="dels"><div class="del">-</div></td>
+						</tr>
+						<tr>
+							<td class="m_list_num"><span >1</span></td>
+							<td class="music_name"><div>Teenage Dream</div></td>
+							<td class="music_singer"><div>Katy Perry </div></td>
+							<td class="plays"><div class='play'></div></td>
+							<td class="collects"><div class="collect"></div></td>
+							<td class="dels"><div class="del">-</div></td>
+						</tr>
+						<tr>
+							<td class="m_list_num"><span >1</span></td>
+							<td class="music_name"><div>Teenage Dream</div></td>
+							<td class="music_singer"><div>Katy Perry </div></td>
+							<td class="plays"><div class='play'></div></td>
+							<td class="collects"><div class="collect"></div></td>
+							<td class="dels"><div class="del">-</div></td>
+						</tr>
+						<tr>
+							<td class="m_list_num"><span >1</span></td>
+							<td class="music_name"><div>Teenage Dream</div></td>
+							<td class="music_singer"><div>Katy Perry </div></td>
+							<td class="plays"><div class='play'></div></td>
+							<td class="collects"><div class="collect"></div></td>
+							<td class="dels"><div class="del">-</div></td>
+						</tr>
+						<tr>
+							<td class="m_list_num"><span >1</span></td>
+							<td class="music_name"><div>Teenage Dream</div></td>
+							<td class="music_singer"><div>Katy Perry </div></td>
+							<td class="plays"><div class='play'></div></td>
+							<td class="collects"><div class="collect"></div></td>
+							<td class="dels"><div class="del">-</div></td>
+						</tr>
+						<tr>
+							<td class="m_list_num"><span >1</span></td>
+							<td class="music_name"><div>Teenage Dream</div></td>
+							<td class="music_singer"><div>Katy Perry </div></td>
+							<td class="plays"><div class='play'></div></td>
+							<td class="collects"><div class="collect"></div></td>
+							<td class="dels"><div class="del">-</div></td>
+						</tr>
+						<tr>
+							<td class="m_list_num"><span >1</span></td>
+							<td class="music_name"><div>Teenage Dream</div></td>
+							<td class="music_singer"><div>Katy Perry </div></td>
+							<td class="plays"><div class='play'></div></td>
+							<td class="collects"><div class="collect"></div></td>
+							<td class="dels"><div class="del">-</div></td>
+						</tr>
+						<tr>
+							<td class="m_list_num"><span >1</span></td>
+							<td class="music_name"><div>Teenage Dream</div></td>
+							<td class="music_singer"><div>Katy Perry </div></td>
+							<td class="plays"><div class='play'></div></td>
+							<td class="collects"><div class="collect"></div></td>
+							<td class="dels"><div class="del">-</div></td>
+						</tr>
+						<tr>
+							<td class="m_list_num"><span >1</span></td>
+							<td class="music_name"><div>Teenage Dream</div></td>
+							<td class="music_singer"><div>Katy Perry </div></td>
+							<td class="plays"><div class='play'></div></td>
+							<td class="collects"><div class="collect"></div></td>
+							<td class="dels"><div class="del">-</div></td>
+						</tr>
+						<tr>
+							<td class="m_list_num"><span >1</span></td>
+							<td class="music_name"><div>Teenage Dream</div></td>
+							<td class="music_singer"><div>Katy Perry </div></td>
+							<td class="plays"><div class='play'></div></td>
+							<td class="collects"><div class="collect"></div></td>
+							<td class="dels"><div class="del">-</div></td>
+						</tr>
+						<tr>
+							<td class="m_list_num"><span >1</span></td>
+							<td class="music_name"><div>Teenage Dream</div></td>
+							<td class="music_singer"><div>Katy Perry </div></td>
+							<td class="plays"><div class='play'></div></td>
+							<td class="collects"><div class="collect"></div></td>
+							<td class="dels"><div class="del">-</div></td>
+						</tr>
+						<tr>
+							<td class="m_list_num"><span >1</span></td>
+							<td class="music_name"><div>Teenage Dream</div></td>
+							<td class="music_singer"><div>Katy Perry </div></td>
+							<td class="plays"><div class='play'></div></td>
+							<td class="collects"><div class="collect"></div></td>
+							<td class="dels"><div class="del">-</div></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</section>
+		<!-- 我的收藏end -->
+
+
+	</div>
+
+
+
+	<!-- 底部播放面板 -->
+	<div class="play-banner">
+		<a href="javascript:;" hidefocus="true" data-action="play" class="play" title="播放/暂停(p)"></a>
+		<div class="progress-bar">
+			<div class="rdy" style="width:0%;"></div>
+			<div class="cur" style="width:0%;">
+				<span class="btn f-tdn f-alpha"><i></i></span>
+			</div>
+			<span class="time"><em>00:00</em> / <b>00:00</b></span>
+		</div>
+		<!-- 声音调节 & 播放方式-->
+		<div class="vol-box">
+			<div class="m-vol">
+				<div class="barbg"></div>
+				<div class="vbg j-t">
+					<div class="curr" style="height: 46.5px;"></div>
+					<span class="btn f-alpha j-t" style="top: 40.5px;"></span>
+				</div>
+			</div>
+			<a id="vol" href="javascript:;" hidefocus="true" data-action="volume" class="icn icn-vol"></a>
+			<a href="javascript:;" hidefocus="true" data-action="mode" class="icn icn-loop" title="循环"></a>
+			<a href="javascript:;" hidefocus="true" data-action="like" class="icn icn-add j-flag" title="添加"></a>
+			<div class="heart" rel="unlike"></div>
+		</div>
+		<!-- 声音调节 & 播放方式 end -->
+		
+		<a href="javascript:;" hidefocus="true" data-action="prev" class="pre" title="上一首(ctrl+←)"></a>
+		<div class="album-cover play-rotate">
+			<img src="src/imgs/default_album.jpg">
+		</div>
+		<a href="javascript:;" hidefocus="true" data-action="next" class="nxt" title="下一首(ctrl+→)"></a>
+
+		<!-- 歌曲显示 -->
+		<div class="mus-box">
+			<h3 class="mus-name">huhahuah</h3>
+			<span>&nbsp;——&nbsp;</span>
+			<h3 class="mus-singer">redjoy</h3>
+		</div>
+		<!-- 歌曲显示end -->
+
+		<!-- <div class="ctrl f-fl f-pr j-flag">
+			<a href="javascript:;" hidefocus="true" data-action="mode" class="icn icn-loop" title="循环"></a>
+			<span class="add f-pr">
+			<span class="tip" style="display:none;">已添加到播放列表</span>
+			<a href="javascript:;" title="播放列表" hidefocus="true" data-action="panel" class="icn icn-list s-fc3">2</a>
+			</span>
+			<div class="tip tip-1" style="display:none;">循环</div>
+		</div> -->
+	</div>
+
+	<audio id="Audio">
+		<source src="" type="audio/mpeg">
+	</audio>
+	<!-- 底部播放面板结束 -->
+
+
+
+	<!-- 登录、注册 and  遮罩 start -->
+	<div id="signin" class="rl-modal" aria-hidden="false">
+	    <div class="rl-modal-header">  
+	      <button type="button" class="rl-close iconfont " data-dismiss="modal" hidefocus="true" aria-hidden="true">&#xe635;</button>
+	    </div>
+	    <div id="login" class="rl-modal-body clrfix animate from">
+	    	<h1 class="clrfix">
+	    		<span class="active-title">登录</span>
+	      	</h1>
+		  	<div class="l-left-wrap l">
+		  		<form id="signup-form" autocomplete="off">
+		  			<p class="rlf-tip-globle " id="signin-globle-error"></p>
+		  			<div class="rlf-group">
+		  				<input type="text" value="" name="email" data-validate="email" autocomplete="off" class="ipt ipt-email js-own-name" >
+		  				<label for="name">请输入用户名</label>
+		  				<p class="rlf-tip-wrap"></p>
+		  			</div>
+		  			<div class="rlf-group proclaim-loc js-proclaim-on ">
+		  				<a href="javascript:void(0)" hidefocus="true" class="proclaim-btn js-proclaim icon-show-pw is-pwd" tabindex="-1"></a>
+		  				<input type="password" name="password" data-validate="password" class="ipt ipt-pwd js-pass-pwd"  maxlength="16"   autocomplete="off">
+		  				<label>6-16位密码，区分大小写，不能用空格</label>
+		  		        <p class="rlf-tip-wrap"></p>
+		  			</div>
+		  			
+		  			<div class="rlf-group rlf-appendix clrfix">
+		  				<label for="auto-signin" class="rlf-autoin l" hidefocus="true"><input type="checkbox" checked="checked" class="auto-cbx" id="auto-signin">下次自动登录</label>
+		  				<a href="/user/newforgot" class="rlf-forget r" target="_blank" hidefocus="true">忘记密码 </a>
+		  			</div>
+		  			<div class="rlf-group clrfix">
+		  				<button id="signin-btn" class="btn-red btn-full">登录</button>
+		  			</div>
+		  	    </form>
+		  	</div>
+		  	<p class="change_link r" >还没账号?快来<a href="javascript:;" class='reg'>注册</a></p>
+	    </div>
+	  	
+	  	<div id="register" class="rl-modal-body clrfix animate from" width="500px" height="500px" >
+	  		<h1 class="clrfix">
+		  		<span class="active-title">注册</span>
+	      	</h1>
+		  	<div class="l-left-wrap l">
+		  		<form id="signup-form" autocomplete="off">
+		  			<p class="rlf-tip-globle " id="signin-globle-error"></p>
+		  			<div class="rlf-group">
+		  				<input type="text" value="" name="email" data-validate="email" autocomplete="off" class="ipt ipt-email js-own-name" >
+		  				<label for="name">请输入用户名</label>
+		  				<p class="rlf-tip-wrap"></p>
+		  			</div>
+		  			<div class="rlf-group proclaim-loc js-proclaim-on ">
+		  				<a href="javascript:void(0)" hidefocus="true" class="proclaim-btn js-proclaim icon-show-pw is-pwd" tabindex="-1"></a>
+		  				<input type="password" name="password" data-validate="password" class="ipt ipt-pwd js-pass-pwd"  maxlength="16"   autocomplete="off">
+		  				<label>6-16位密码，区分大小写，不能用空格</label>
+		  		        <p class="rlf-tip-wrap"></p>
+		  			</div>
+		  			<div class="rlf-group proclaim-loc js-proclaim-on ">
+		  				<a href="javascript:void(0)" hidefocus="true" class="proclaim-btn js-proclaim icon-show-pw is-pwd" tabindex="-1"></a>
+		  				<input type="password" name="password" data-validate="password" class="ipt ipt-pwd js-pass-pwd"  maxlength="16"   autocomplete="off">
+		  				<label>再次确认密码</label>
+		  		        <p class="rlf-tip-wrap"></p>
+		  			</div>
+		  		
+		  			<div class="rlf-group clrfix">
+		  				<button id="signin-btn" class="btn-red btn-full">注册</button>
+		  			</div>
+		  	    </form>
+		  	</div>
+		  	<p class="change_link r">已有账号?去<a href="javascript:;" class='log'>登录</a></p>
+	  	</div>
+	</div>
+	<div class="modal-backdrop"></div>
+	<!-- 登录、注册 and  遮罩 end -->
+
+
+	<!-- <script>
+		var iWidth = document.documentElement.clientWidth;
+	 	document.getElementsByTagName("html")[0].style.fontSize = iWidth /16 +"px";
+	</script>-->
+</body>
+</html>
