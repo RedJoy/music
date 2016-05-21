@@ -1,4 +1,4 @@
-*,ul,li,img,a,h1,h2,h3,span{
+*,ul,li,img,a,h1,h2,h3,h4,span,section,header,nav{
 	margin:0;
 	padding:0;
 }

@@ -92,8 +92,29 @@ header .header-wrap{
 	display:inline-block;
 	width:80px;
 	height:70px;
+	font-size: 14px;
 	line-height: 70px;
 	text-align: center;
+}
+.user-show{
+	display: none;
+	color:#fff;
+	// display: inline-block;
+	margin-left: 20px;
+	height: 70px;
+	line-height: 70px;
+	font-size: 14px;
+	text-align: center;
+}
+.logout-btn{
+	display: none;
+	color:#fff;
+	// display: inline-block;
+	height: 70px;
+	margin-left: 5px;
+	font-size: 14px;
+	line-height: 70px;
+	text-align: left;
 }
 /*导航条end*/
 
@@ -493,12 +514,14 @@ header .header-wrap{
 }
 .rlf-tip-wrap {
     font-size: 12px;
-    height: 20px;
+    height: 30px;
+    color:red;
 }
 .rlf-tip-globle {
     font-size: 14px;
-    height: 30px;
+    height: 36px;
     line-height: 30px;
+    color:red;
 }
 .rlf-group{
 	position: relative;
@@ -1021,7 +1044,7 @@ figure span {
 	
 }
 .my_music .u_title h3{
-	font: normal 20px/30px '微软雅黑';
+	font: normal 20px/30px 'Microsoft YaHei';
 }
 .my_music .u_title .sub{
 	line-height: 38px;
@@ -1103,7 +1126,7 @@ figure span {
 	
 }
 .my_collect .u_title h3{
-	font: normal 20px/30px '微软雅黑';
+	font: normal 20px/30px 'Microsoft YaHei';
 }
 .my_collect .u_title .sub{
 	line-height: 38px;
@@ -1272,7 +1295,7 @@ figure span {
 	
 }
 .music_recomment h2{
-	font:normal 20px/30px '微软雅黑';
+	font:normal 20px/30px 'Microsoft YaHei';
 	padding-left: 20px;
 	border-left: 3px solid #FF4D4C;
 }

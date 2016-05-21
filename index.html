@@ -4,14 +4,9 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0">
 	<title>音乐播放器</title>
-	<link rel="shortcut icon" href="imgs/color-icon.ico">
-	<link rel="stylesheet" type="text/css" href="sass/index.css">
-	<!-- <script src="http://libs.baidu.com/jquery/1.9.1/jquery.js"></script> -->
-	<script src="src/js/jquery-1.11.2.min.js"></script>
-	<script src="src/js/data.js"></script>
-	<script src="src/js/index.js"></script>
+	<link rel="shortcut icon" href="src/imgs/color-icon.ico">
+	<link rel="stylesheet" type="text/css" href="src/css/index.css">
 </head>
-	</head>
 <body>
 	<!--头部导航条-->
 	<header>
@@ -26,6 +21,9 @@
 				</ul>
 			</nav>
 			<a href="javascript:0;" class="login-btn r" id="js-login">登录</a>
+			<a href="javascript:0;" class="logout-btn r" id="logout">,退出</a>
+			<span class="user-show r" id="user"></span>
+			
 			<div class="search-box">
 				<input type="text" class="search">
 				<!-- <label for="">歌曲/</label> -->
@@ -388,28 +386,22 @@
 	    		<span class="active-title">登录</span>
 	      	</h1>
 		  	<div class="l-left-wrap l">
-		  		<form id="signup-form" autocomplete="off">
 		  			<p class="rlf-tip-globle " id="signin-globle-error"></p>
+
 		  			<div class="rlf-group">
-		  				<input type="text" value="" name="email" data-validate="email" autocomplete="off" class="ipt ipt-email js-own-name" >
-		  				<label for="name">请输入用户名</label>
-		  				<p class="rlf-tip-wrap"></p>
+		  				<input type="text" value="" id="js-name" minlength="6" maxlength="20" autocomplete="off" class="ipt ipt-email js-own-name" required/>
+		  				<label for="doc-vld-name-2">请输入用户名</label>
+		  				<p class="rlf-tip-wrap" id="js-login-name"></p>
 		  			</div>
+
 		  			<div class="rlf-group proclaim-loc js-proclaim-on ">
-		  				<a href="javascript:void(0)" hidefocus="true" class="proclaim-btn js-proclaim icon-show-pw is-pwd" tabindex="-1"></a>
-		  				<input type="password" name="password" data-validate="password" class="ipt ipt-pwd js-pass-pwd"  maxlength="16"   autocomplete="off">
+		  				<input type="password" name="password" data-validate="password" class="ipt ipt-pwd js-pass-pwd"  maxlength="16"  id="js-password" autocomplete="off">
 		  				<label>6-16位密码，区分大小写，不能用空格</label>
-		  		        <p class="rlf-tip-wrap"></p>
-		  			</div>
-		  			
-		  			<div class="rlf-group rlf-appendix clrfix">
-		  				<label for="auto-signin" class="rlf-autoin l" hidefocus="true"><input type="checkbox" checked="checked" class="auto-cbx" id="auto-signin">下次自动登录</label>
-		  				<a href="/user/newforgot" class="rlf-forget r" target="_blank" hidefocus="true">忘记密码 </a>
+		  		        <p class="rlf-tip-wrap" id="js-login-password"></p>
 		  			</div>
 		  			<div class="rlf-group clrfix">
 		  				<button id="signin-btn" class="btn-red btn-full">登录</button>
 		  			</div>
-		  	    </form>
 		  	</div>
 		  	<p class="change_link r" >还没账号?快来<a href="javascript:;" class='reg'>注册</a></p>
 	    </div>
@@ -419,35 +411,34 @@
 		  		<span class="active-title">注册</span>
 	      	</h1>
 		  	<div class="l-left-wrap l">
-		  		<form id="signup-form" autocomplete="off">
-		  			<p class="rlf-tip-globle " id="signin-globle-error"></p>
+		  			<p class="rlf-tip-globle " id="register-globle-error"></p>
+
 		  			<div class="rlf-group">
-		  				<input type="text" value="" name="email" data-validate="email" autocomplete="off" class="ipt ipt-email js-own-name" >
+		  				<input type="text" value="" name="email" data-validate="email" autocomplete="off" class="ipt ipt-email" id="username">
 		  				<label for="name">请输入用户名</label>
-		  				<p class="rlf-tip-wrap"></p>
+		  				<p class="rlf-tip-wrap" id="js-username"></p>
 		  			</div>
+
 		  			<div class="rlf-group proclaim-loc js-proclaim-on ">
-		  				<a href="javascript:void(0)" hidefocus="true" class="proclaim-btn js-proclaim icon-show-pw is-pwd" tabindex="-1"></a>
-		  				<input type="password" name="password" data-validate="password" class="ipt ipt-pwd js-pass-pwd"  maxlength="16"   autocomplete="off">
+		  				<input type="password" name="password" class="ipt ipt-pwd"  maxlength="16" id="pwd" autocomplete="off">
 		  				<label>6-16位密码，区分大小写，不能用空格</label>
-		  		        <p class="rlf-tip-wrap"></p>
+		  		        <p class="rlf-tip-wrap" id="js-reg-password"></p>
 		  			</div>
+
 		  			<div class="rlf-group proclaim-loc js-proclaim-on ">
-		  				<a href="javascript:void(0)" hidefocus="true" class="proclaim-btn js-proclaim icon-show-pw is-pwd" tabindex="-1"></a>
-		  				<input type="password" name="password" data-validate="password" class="ipt ipt-pwd js-pass-pwd"  maxlength="16"   autocomplete="off">
+		  				<input type="password" name="password" class="ipt ipt-pwd"  id="pwdconfirm" maxlength="16"  autocomplete="off">
 		  				<label>再次确认密码</label>
-		  		        <p class="rlf-tip-wrap"></p>
+		  		        <p class="rlf-tip-wrap" id="js-reg-confirm"></p>
 		  			</div>
 		  		
 		  			<div class="rlf-group clrfix">
-		  				<button id="signin-btn" class="btn-red btn-full">注册</button>
+		  				<button id="register-btn" class="btn-red btn-full">注册</button>
 		  			</div>
-		  	    </form>
 		  	</div>
 		  	<p class="change_link r">已有账号?去<a href="javascript:;" class='log'>登录</a></p>
 	  	</div>
 	</div>
-	<div class="modal-backdrop"></div>
+	<div class="modal-backdrop modal-backdropss"></div>
 	<!-- 登录、注册 and  遮罩 end -->
 
 
@@ -455,5 +446,9 @@
 		var iWidth = document.documentElement.clientWidth;
 	 	document.getElementsByTagName("html")[0].style.fontSize = iWidth /16 +"px";
 	</script>-->
+
+	<script src="src/js/jquery-1.11.2.min.js"></script>
+	<script src="src/js/sea.js"></script>
+	<script>seajs.use('main.js');</script>
 </body>
 </html>

@@ -17,7 +17,9 @@ player = {
 		
         self.recomMusicBox();
 		self.musicClassify();
+        self.info();
 		self.login();
+        self.fromValidate();
 		self.closeLogin();
 		self.voiceControl();
 		self.collect('.heart');
@@ -139,30 +141,143 @@ player = {
             }
         }
     },
-	login:function(){
+    info:function(){//登陆与否判断
+        $.ajax({
+            url:'server.php/info',
+            type:'post',
+            dataType:'json',
+            success:function(data){
+                if(data.code == 200){
+                    $('#user').html(data.data.username).show();
+                    $('#js-login').hide();
+                    $('#logout').show();
+                }else{
+                    console.log(data.msg);
+                }
+            }
+        })
+    },
+	login:function(){//登陆显示、注册切换
 		$('#js-login').on("click",function(){
-			$('.modal-backdrop').show();
+			$('.modal-backdropss').show();
 			$('#signin').show();
 		});
-		$('.modal-backdrop').on('click',function() {
+		$('.modal-backdropss').on('click',function() {
 			$('#signin').hide();
 			$(this).hide();
 		});
-        $('#signin-btn').on('click',function(){
+        $('#signin-btn').on('click',function(){//登陆ajax请求
             $.ajax({
-                url:'/server.php/login',
+                url:'server.php/login',
                 type:'post',
                 data:{
                     username : $('.js-own-name').val(), 
                     password : $('.js-pass-pwd').val()
                 },
-                datatype:'json',
+                dataType:'json',
                 success:function(data){
-                    
+                    if(data.code == 200){
+                        $('#user').html($('.js-own-name').val()).show();
+                        $('#js-login').hide();
+                        $('#logout').show();
+                        $('#signin').hide();
+                        $('.modal-backdropss').hide();
+                    }else{
+                        $('#signin-globle-error').html(data.msg);
+                    }
                 }
             })
-        })
+        });
+        $('#register-btn').on('click',function(){//注册ajax请求
+            $.ajax({
+                url:'server.php/register',
+                type:'post',
+                data:{
+                    username: $('#username').val(),
+                    password: $('#pwd').val(),
+                    pwdconfm: $('#pwdconfirm').val()
+                },
+                dataType:'json',
+                success:function(data){
+                    if(data.code == 200){
+                        $('#signin-globle-error').html('注册成功！请登录');
+                        $('#login').show();
+                        $('#register').hide();
+                    }else{
+                        $('#register-globle-error').html(data.msg);
+                    }
+                }
+            })
+        });
+        $('#logout').on('click',function(){//退出ajax请求
+            $.ajax({
+                url:'server.php/logout',
+                type:'post',
+                data:{
+                    username : $('#user').text()
+                },
+                dataType:'json',
+                success:function(data){
+                    if(data.code == 200){
+                        $('#user').hide();
+                        $('#js-login').show();
+                        $('#logout').hide();
+                    }else{
+                        console.log('error');
+                    }
+                }
+            })
+        });
 	},
+    fromValidate:function(){//表单验证
+        function errorType(_name){//正则判断返回结果
+            if( _name == ""){ 
+                return 0;
+            }else if(_name.length<6 || _name.length>16){ //合法长度为6-18个字符
+                return -1;
+            }else if(! /^\w+$/.test( _name ) ){ //用户名只能包含_,英文字母，数字  
+                return -2;
+            }else{
+                return -3;
+            }
+        }
+        function errorTip($nameTip,_name){//显示对于提示信息
+            var _error = errorType(_name);
+            if(_error == 0){
+                $nameTip.text('不能为空');
+            }else if(_error == -1){
+                $nameTip.text('长度为6-16个字符');
+            }else if(_error == -2){
+                $nameTip.text('只能包含_，英文字母，数字');
+            }else{
+                $nameTip.text('');
+            }
+        }
+        function validate(item,target,tipDom){//验证
+            $(item).on('blur',target,function(){
+                var _name = $.trim($(this).val()),
+                    $nameTip = $(tipDom);
+                errorTip($nameTip,_name);       
+            });
+        }
+        validate('#login','#js-name','#js-login-name');//登陆用户名验证
+        validate('#login','#js-password','#js-login-password');//登陆密码验证
+        validate('#register','#username','#js-username');//注册用户名验证
+        validate('#register','#pwd','#js-reg-password');//注册密码验证
+
+       
+        $('#register').on('blur','#pwdconfirm',function(){//注册再次密码验证
+            var _name = $.trim($(this).val()),
+                _pwd = $.trim($('#pwd').val());
+                $nameTip = $('#js-reg-confirm');
+            if(_name != _pwd){
+                $nameTip.text('两次密码不一致');
+            }else{
+                $nameTip.text('');
+            }
+        });
+
+    },
 	closeLogin:function(){
 		$('.rl-close').on('click',function(){
 			$('.modal-backdrop').trigger('click');
