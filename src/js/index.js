@@ -9,20 +9,24 @@ var win = window;
 var doc = document;
 var player = {};
 var defaults ={
-
-}
+    'isLogin':0,
+    'userid':'',
+    'username':''
+};
 player = {
 	init:function(){
 		var self = this;
-		
+
         self.recomMusicBox();
 		self.musicClassify();
         self.info();
 		self.login();
         self.fromValidate();
 		self.closeLogin();
-		self.voiceControl();
-		self.collect('.heart');
+		self.voiceShow();
+        self.collect('.heart');
+        self.adds('.adds');
+		self.del('.del');
 		self.floatLabel('.ipt');
 		self.navSwitch();
 		self.bannerPlay();
@@ -33,6 +37,7 @@ player = {
         self.closeRecommendMusicList();
         self.playMusic();
         self.playBtn();
+        // self.progressSlider();
         
 	},
 	musicClassify:function(){
@@ -64,7 +69,7 @@ player = {
             var musicList = Data[1][listIndex];
             for(var j in musicList){
                 var munber = parseInt(j)+1;
-                var item = '<tr data-id="'+musicList[j].Id+'" data-src="'+musicList[j].Src+'" data-img="'+musicList[j].Img+'" data-time="'+musicList[j].Time+'">\
+                var item = '<tr data-id="'+musicList[j].Id+'" data-src="'+musicList[j].Src+'" data-img="'+musicList[j].Img+'">\
                                 <td class="m_list_num"><span >'+munber+'</span></td>\
                                 <td class="music_name">'+musicList[j].Name+'</td>\
                                 <td class="music_singer">'+musicList[j].Singer+'</td>\
@@ -93,8 +98,8 @@ player = {
         var styleList = [
                             'background:#3A87A1;',
                             'background:#6D4D4C;',
-                            'background:#101010;',
-                            'background:#7B767C;',
+                            'background:#262d37;',
+                            'background:#e46a1d;',
                             'background:#862624;margin-right:0px;'
                         ];
         for(var i in musicList){
@@ -126,7 +131,7 @@ player = {
             var musicList =recomMusicDate[2][listIndex];
             for(var j in musicList){
                 var munber = parseInt(j)+1;
-                var item =  '<tr>\
+                var item =  '<tr data-id="'+musicList[j].Id+'" data-src="'+musicList[j].Src+'" data-img="'+musicList[j].Img+'">\
                                 <td class="m_list_num"><span >'+munber+'</span></td>\
                                 <td class="music_name"><div>'+musicList[j].Name+'</div></td>\
                                 <td class="music_singer"><div>'+musicList[j].Singer+'</div></td>\
@@ -148,10 +153,14 @@ player = {
             dataType:'json',
             success:function(data){
                 if(data.code == 200){
-                    $('#user').html(data.data.username).show();
+                    defaults.userid = data.data.user_id;
+                    defaults.username = data.data.username;
+                    $('#user').html(defaults.username).show();
                     $('#js-login').hide();
                     $('#logout').show();
+                    defaults.isLogin = 1;
                 }else{
+                    defaults.isLogin = 0;
                     console.log(data.msg);
                 }
             }
@@ -177,13 +186,18 @@ player = {
                 dataType:'json',
                 success:function(data){
                     if(data.code == 200){
-                        $('#user').html($('.js-own-name').val()).show();
+                        defaults.isLogin = 1;
+                        defaults.userid = data.data.user_id;
+                        defaults.username = data.data.username;
+                        $('#user').html(defaults.username).show();
                         $('#js-login').hide();
                         $('#logout').show();
                         $('#signin').hide();
                         $('.modal-backdropss').hide();
+                        defaults.isLogin = 1;
                     }else{
                         $('#signin-globle-error').html(data.msg);
+                        defaults.isLogin = 0;
                     }
                 }
             })
@@ -219,11 +233,11 @@ player = {
                 dataType:'json',
                 success:function(data){
                     if(data.code == 200){
-                        $('#user').hide();
-                        $('#js-login').show();
-                        $('#logout').hide();
+                        defaults.isLogin = 0;
+                        window.location.reload();
                     }else{
                         console.log('error');
+                        defaults.isLogin = 1;
                     }
                 }
             })
@@ -295,8 +309,7 @@ player = {
             interval = 5000,
             timer = null;
 
-        // 一张图 不执行轮播
-        if(total == 1) {
+        if(total == 1) { // 一张图 不执行轮播
             next();
             return;
         }
@@ -311,33 +324,25 @@ player = {
 
         function show(i){
             var cur = slides.filter('.slide-active');
-
             slides.stop(true, true);
-
             cur.removeClass('slide-active').fadeOut(600);
-
             slides.eq(i).addClass('slide-active').fadeIn(800);
-
             dots && dots.removeClass('active').eq(i).addClass('active');
         }
         function prev(){
             index--;
-
             index = index < 0 ? total - 1 : index;
-
             show(index);
         }
 
         function next(){
             index++;
             index = index > total - 1 ? 0 : index;
-
             show(index);
         }
 
         function autoPlay(){
             if(timer) clearInterval(timer);
-
             timer = setInterval(function(){
                 next();
             }, interval);
@@ -351,11 +356,8 @@ player = {
             next();
         }).on('click', '.banner-dots span', function(e){
             if($(this).hasClass('active')) return;
-
             var i = $(this).index();
-
             index = i;
-
             show(i);
         });
 
@@ -366,28 +368,99 @@ player = {
         });
 
         next();
-
         autoPlay();
     
 	},
-	voiceControl:function(){// 音量调节
-		var $vol = $('.play-banner').find("#vol");
-
+	voiceShow:function(){// 音量调节显示
+		var self = this,
+        $vol = $('.play-banner').find("#vol");
 		$vol.on("click",function(){
 			$('.play-banner').find('.m-vol').toggle();
 		});
+        self.volumeSlider();
 	},
 	collect:function(heart){// 收藏
-		var $heart = $(heart)
+		var $heart = $(heart);
 		$heart.on('click',function(){
-			if($(this).hasClass('heartAnimation')){
-				$(this).addClass('heartOver').removeClass('heartAnimation');
-			}else{
-				$(this).addClass('heartAnimation').removeClass('heartOver');
-			}
-			
+            if(defaults.isLogin == 0){
+                $('#js-login').trigger('click');
+            }else{
+                //ajax
+                var musicId = $(this).parent('tr').attr('data-id');
+                // $.ajax({
+                //     url:'server.php/collect',
+                //     type:'post',
+                //     data:{
+                //         musicId : musicId,
+                //         userid : defaults.userid
+                //     },
+                //     dataType:'json',
+                //     success:function(data){
+                //         if(data.code == 200){
+                //             if($(this).hasClass('heartAnimation')){
+                //                 $(this).addClass('heartOver').removeClass('heartAnimation');
+                //             }else{
+                //                 $(this).addClass('heartAnimation').removeClass('heartOver');
+                //             }
+                //         }else{
+                //             console.log('添加到收藏列表失败');
+                //         }
+                //     }
+                // });
+                
+            }
 		});
 	},
+    adds:function(adds){//添加
+        var $adds = $(adds);
+        $adds.on('click',function(){
+            if(defaults.isLogin == 0){
+                $('#js-login').trigger('click');
+            }else{
+                //ajax
+                var musicId = $(this).parent('tr').attr('data-id');
+                // $.ajax({
+                //     url:'server.php/adds',
+                //     type:'post',
+                //     data:{
+                //         musicId : musicId,
+                //         userid : defaults.userid
+                //     },
+                //     dataType:'json',
+                //     success:function(data){
+                //         if(data.code == 200){
+                //             $(this).addClass('alreadyClick').css('color','#6F7375');
+                //         }else{
+                //             console.log('添加到播放列表失败');
+                //         }
+                //     }
+                // });
+            }
+        });
+    },
+    del:function(del){//删除
+        var $dels = $(del);
+        $dels.on('click',function(){
+            //ajax
+            var musicId = $(this).parent('tr').attr('data-id');
+            // $.ajax({
+            //     url:'server.php/del',
+            //     type:'post',
+            //     data:{
+            //         musicId : musicId,
+            //         userid : defaults.userid
+            //     },
+            //     dataType:'json',
+            //     success:function(data){
+            //         if(data.code == 200){
+            //             $(this).parent('tr').animate({'height':0},200);
+            //         }else{
+            //             console.log('删除失败');
+            //         }
+            //     }
+            // });
+        });
+    },
 	floatLabel:function (inputType) {//登录注册输入框，提示上浮
         $(inputType).each(function () {
             var $this = $(this);
@@ -402,11 +475,91 @@ player = {
         });
     },
     navSwitch:function (){//导航切换
+        var self = this;
     	$('.header-wrap li').find('a').on('click',function() {
     		var order = $(this).attr('data-icon');
 			$(this).parents('li').addClass('active').siblings().removeClass('active');
-    		
-    		$('.main-box').removeClass('control0 control1 control2 control3').addClass('control'+order);
+    
+            if(order == 2 || order == 3){
+                if(defaults.isLogin == 0){
+                    $('#js-login').trigger('click');
+                }else{
+                    $('.main-box').removeClass('control0 control1 control2 control3').addClass('control'+order);
+                    // if(order == 2){//ajax请求播放列表
+                    //     $.ajax({
+                    //         url:'server.php/playlists',
+                    //         type:'post',
+                    //         data:{ userid : defaults.userid},
+                    //         dataType:'json',
+                    //         success:function(data){
+                    //             if(data.code == 200){
+                    //                 var datas = data.data;
+                    //                 if(datas == 0){
+                    //                     $('.my_music').find('.u_title').hide();
+                    //                     $('.my_music').find('.u_title_list').hide();
+                    //                     $('.my_music').find('.no-login').show();
+                    //                 }else{
+                    //                     $('.my_music').find('.no-login').hide();
+                    //                     $('.my_music').find('.u_title').show();
+                    //                     for(var i in datas){
+                    //                         var num = parseInt(i)+1;
+                    //                         var list = '<tr data-id="'+datas[j].id+'" data-src="'+datas[j].src+'" data-img="'+datas[j].img+'">\
+                    //                                         <td class="m_list_num"><span>'+num+'</span></td>\
+                    //                                         <td class="music_name"><div>'+datas[i].title+'</div></td>\
+                    //                                         <td class="music_singer"><div>'+datas[i].singer+'</div></td>\
+                    //                                         <td class="plays"><div class="play"></div></td>\
+                    //                                         <td class="collects"><div class="heart"></div></td>\
+                    //                                         <td class="dels"><div class="del">-</div></td>\
+                    //                                     </tr>';
+                    //                     }
+                    //                     $('.my_music .u_title_list').find('.tbody').append(list);
+                    //                 }
+                    //             }else{
+                    //                 console.log('加载播放列表失败');
+                    //             }
+                    //         }
+                    //     });
+                    // }else{//ajax请求收藏列表
+                    //     $.ajax({
+                    //         url:'server.php/collect_list',
+                    //         type:'post',
+                    //         data:{
+                    //             userid : defaults.userid;
+                    //         },
+                    //         dataType:'json',
+                    //         success:function(data){
+                    //             if(data.code == 200){
+                    //                 var datas = data.data;
+                    //                 if(datas == 0){
+                    //                     $('.my_collect').find('.u_title').hide();
+                    //                     $('.my_collect').find('.u_title_list').hide();
+                    //                     $('.my_collect').find('.no-login').show();
+                    //                 }else{
+                    //                     $('.my_collect').find('.no-login').hide();
+                    //                     $('.my_collect').find('.u_title').show();
+                    //                     for(var i in datas){
+                    //                         var num = parseInt(i)+1;
+                    //                         var list = '<tr data-id="'+datas[j].id+'" data-src="'+datas[j].src+'" data-img="'+datas[j].img+'">\
+                    //                                         <td class="m_list_num"><span>'+num+'</span></td>\
+                    //                                         <td class="music_name"><div>'+datas[i].title+'</div></td>\
+                    //                                         <td class="music_singer"><div>'+datas[i].singer+'</div></td>\
+                    //                                         <td class="plays"><div class="play"></div></td>\
+                    //                                         <td class="collects"><div class="collect"></div></td>\
+                    //                                         <td class="dels"><div class="del">-</div></td>\
+                    //                                     </tr>';
+                    //                     }
+                    //                     $('.my_collect .u_title_list').find('.tbody').append(list);
+                    //                 }
+                    //             }else{
+                    //                 console.log('加载收藏列表失败');
+                    //             }
+                    //         }
+                    //     });
+                    // }
+                }
+            }else{
+                $('.main-box').removeClass('control0 control1 control2 control3').addClass('control'+order);
+            }
     	});
     },
     loginChange:function(){//登录、注册切换
@@ -436,7 +589,7 @@ player = {
             $('.index .modal-backdrop').append('<div class="close iconfont">&#xe635;</div>');
         });
     },
-    closeRecommendMusicList:function(){
+    closeRecommendMusicList:function(){//关闭音乐推荐列表
         $('.modal-backdrops').on('click',function(){
             $(this).hide();
             $('.music_item a').find('.img').removeClass('musical_desc');
@@ -448,49 +601,101 @@ player = {
     },
     playMusic:function(){//播放分类歌曲
         var self = this;
-        $('.more_box').on('click', '.plays', function() {
+        $('.plays').on('click', function() {
             var $parents = $(this).parents('tr'),//获取点击的父节点
                 Audio = document.getElementById('Audio'),//获取音乐播放器
                 $plyBanner = $('.play-banner');
             var musicId = $parents.attr('data-id'),
                 musicSrc = $parents.attr('data-src'),
                 musicImg = $parents.attr('data-img'),
-                musicTime = $parents.attr('data-time'),
                 catogroy = $parents.parent('.col').attr('data-catogroy'),
                 musicName = $parents.find('.music_name').html(),
-                musicSinger = $parents.find('.music_singer').html();
+                musicSinger = $parents.find('.music_singer').html(),
+                musicCurrentTime = $plyBanner.find('.time em');
 
             console.log(musicSrc);
             $(Audio).attr({'src':musicSrc});
             Audio.load();//加载歌曲
-            Audio.play();//播放歌曲
+            
             // AllRun();
-            self.showMusicDetail(musicId,musicName,musicSinger,musicImg,musicSrc,musicTime);
+            self.showMusicDetail(musicId,musicName,musicSinger,musicImg,musicSrc);
+
+            Audio.addEventListener("loadeddata", function() {//歌曲加载完毕
+
+                    Audio.play();//播放歌曲
+                    $('.play-banner .album-cover').addClass('play-rotate');
+                    self.timeConversion(Audio.duration,'b');//显示当前歌曲时长
+                    self.progressSlider(); //歌曲加载之后才可以拖动进度条
+                    setInterval(function() {
+                        var currentTime = Audio.currentTime;
+                        self.timeConversion(currentTime, "em");
+                    }, 1000);
+                    self.dragMove();
+            }, false);
+            // Audio.addEventListener("pause",function() { //监听暂停
+            //     if(!$plyBanner.find('.play').hasClass('pause')){//更改播放按钮
+            //         $plyBanner.find('.play').addClass('pause');
+            //     }
+            //     if (Audio.currentTime == Audio.duration) {
+            //         // Audio.stop();
+            //         Audio.currentTime = 0;
+            //     }
+            // }, false);
+            // Audio.addEventListener("play",function() { //监听暂停
+            //     if(!$plyBanner.find('.play').hasClass('pause')){//更改播放按钮
+            //         $plyBanner.find('.play').addClass('pause');
+            //     }
+            //         // self.dragMove();
+            // }, false);
+            Audio.addEventListener("ended", function() {//歌曲播放完毕
+                Audio.currentTime = 0;
+                if($plyBanner.find('.play').hasClass('pause')){//更改播放按钮
+                    $plyBanner.find('.play').removeClass('pause');
+                }
+                $('.play-banner .album-cover').removeClass('play-rotate');
+            }, false)
         });
     },
+    timeConversion:function(time,showDom){//转换每首歌曲时长格式并显示
+        var $timePlace = $('.play-banner .time').find(showDom);
+        var minutes = parseInt(time / 60),//分
+            seconds = parseInt(time % 60);//秒
+        if (minutes < 10)
+            minutes = "0" + minutes;
+        if (seconds < 10)
+            seconds = "0" + seconds;
+        var showTime = "" + minutes + "" + ":" + "" + seconds + "";
+        $timePlace.html(showTime);
+    },
     playBtn:function(){//播放按钮
+        var self = this;
         $('.play-banner').on('click','.play',function(){
             var Audio = document.getElementById('Audio');//获取音乐播放器
-            if($(this).hasClass('pause')){
-                $(this).removeClass('pause');
-                Audio.pause();//暂停歌曲
-                $('.play-banner .album-cover').removeClass('play-rotate');
+            if(typeof $(Audio).attr('src') == 'undefined'){
+                return;
             }else{
-                $(this).addClass('pause');
-                Audio.play();//播放歌曲
-                $('.play-banner .album-cover').addClass('play-rotate');
+                if($(this).hasClass('pause')){
+                    $(this).removeClass('pause');
+                    Audio.pause();//暂停歌曲
+                    $('.play-banner .album-cover').removeClass('play-rotate');
+                }else{
+                    $(this).addClass('pause');
+                    Audio.play();//播放歌曲
+                    self.dragMove();//进度条
+                    $('.play-banner .album-cover').addClass('play-rotate');
+                }
             }
+            
         })
         
     },
-    showMusicDetail:function(id,name,singer,img,src,time){//播放面板显示播放当前歌曲详情
+    showMusicDetail:function(id,name,singer,img,src){//播放面板显示播放当前歌曲详情
         var Audio = document.getElementById('Audio'),//获取音乐播放器
             $plyBanner = $('.play-banner'),
             $plyBtn = $plyBanner.find('.play'),
             $img = $plyBanner.find('.album-cover img'),
             $name = $plyBanner.find('.mus-box .mus-name'),
-            $singer = $plyBanner.find('.mus-box .mus-singer'),
-            $time = $plyBanner.find('.time b');
+            $singer = $plyBanner.find('.mus-box .mus-singer');
 
         if(!$plyBtn.hasClass('pause')){//更改播放按钮
             $plyBtn.addClass('pause');
@@ -499,7 +704,115 @@ player = {
         $img.attr('src',img);
         $name.html(name);
         $singer.html(singer);
-        $time.html(time)
+    },
+    dragMove:function() {//进度条加载
+        var Audio = document.getElementById('Audio'),//获取音乐播放器
+            $progress = $('.progress-bar'),
+            $drag = $progress.find('.cur'),
+            $speed = $progress.find('.cur btn');
+        setInterval(function() {
+            $drag.width(Audio.currentTime / Audio.duration * 220);
+            $drag.find('.btn').css('left',Audio.currentTime / Audio.duration * 220);
+        }, 500);
+    },
+    progressSlider:function(){ //进度条拖拽
+        var Audio = document.getElementById('Audio'),//获取音乐播放器
+            $progressBar = $('.progress-bar .cur'),
+            $progressBtn = $progressBar.find('.btn'),
+            _pageX = 0,
+            _x = 0,
+            _left = 0,
+            _bgLeft = 0,
+            status = false;
+        $progressBtn.on('mousedown',function(e){
+            _pageX = $progressBtn.offset().left;
+            _x = e.pageX - _left;
+            status = true;
+            Audio.pause();
+        }).on('mousemove',function(e){
+            if(status){
+                _left = e.pageX - _x;
+                if(_left < 0){
+                    _left = 0;
+                }
+                if(_left > 220){
+                    _left = 220;
+                }
+                $progressBtn.css('left',_left);
+                $progressBar.width(_left);
+                Audio.currentTime = _left / 220 * Audio.duration;
+            }
+        })
+        $(document).on('mouseup',function(){
+            status = false;
+            Audio.play();
+        })
+        $('.progress-bar').on('click',function(e){
+            if(!status){
+                _bgLeft = $progressBar.offset().left;
+                _left = e.pageX - _bgLeft;
+                if(_left < 0){
+                    _left = 0;
+                }
+                if(_left > 220){
+                    _left = 220;
+                }
+                $progressBtn.css('left',_left);
+                $progressBar.css('width',_left);
+                Audio.currentTime = _left / 220 * Audio.duration;
+            }
+        });
+    },
+    volumeSlider:function(){//声音拖动
+        var Audio = document.getElementById('Audio');//获取音乐播放器
+            Audio.volume = 0.5;
+        $('.vol-box .vbg').find('.curr').css('height', 0.5 * 93+'px');
+        $('.vol-box .vbg').find('.btn').css('top', 0.5 * 93 - 9 + 'px');
+        var $volumeBanner = $('.vol-box .vbg'),
+            $volumeBar = $volumeBanner.find('.curr'),
+            $volumeBtn = $volumeBanner.find('.btn'),
+            _pageY = 0,
+            _y = 0,
+            _top = 0,
+            _bgTop = 0,
+            status = false;
+        $volumeBtn.on('mousedown',function(e){
+            _pageY = $volumeBar.offset().top;
+            // console.log($volumeBar.offset().top);
+            _y = e.pageY - _top;
+            status = true;
+        }).on('mousemove',function(e){
+            if(status){
+                _top = e.pageY - _y;
+                if(_top < -9){
+                    _top = -9;
+                }
+                if(_top > 84){
+                    _top = 84;
+                }
+                $volumeBtn.css('top',_top);
+                $volumeBar.height(84-_top);
+                Audio.volume = (84-_top) / 93;
+            }
+        })
+        $(document).on('mouseup',function(){
+            status = false;
+        })
+        // $volumeBanner.on('click',function(e){
+        //     if(!status){
+        //         _bgTop = $volumeBanner.offset().top;
+        //         _top = e.pageX - _bgTop;console.log(_bgTop);
+        //         if(_top < 0){
+        //             _top = 0;
+        //         }
+        //         if(_top > 93){
+        //             _top = 93;
+        //         }
+        //         $volumeBtn.css('top',_top-9);
+        //         $volumeBar.css('height',_top);
+        //         Audio.volume = (_top) / 93;
+        //     }
+        // });
     }
 
 }
@@ -507,8 +820,6 @@ player = {
 
 $(function () {
 	player.init();
-    console.log(Audio.currentTime);
-
 });
 
 // (function($){
