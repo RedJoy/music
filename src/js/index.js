@@ -1,7 +1,7 @@
 /*
-    音乐播放器的实质方法体，
-    提供音乐的操控支持
-    提供歌曲分类的生成
+	音乐播放器的实质方法体，
+	提供音乐的操控支持
+	提供歌曲分类的生成
 */
 
 
@@ -14,57 +14,57 @@ var defaults ={
     'username':''
 };
 player = {
-    init:function(){
-        var self = this;
+	init:function(){
+		var self = this;
 
         self.recomMusicBox();
-        self.musicClassify();
+		self.musicClassify();
         self.info();
-        self.login();
+		self.login();
         self.fromValidate();
-        self.closeLogin();
-        self.voiceShow();
+		self.closeLogin();
+		self.voiceShow();
         self.collect('.heart');
         self.adds('.adds');
-        self.del('.del');
-        self.floatLabel('.ipt');
-        self.navSwitch();
-        self.bannerPlay();
-        self.loginChange();
+		self.del('.del');
+		self.floatLabel('.ipt');
+		self.navSwitch();
+		self.bannerPlay();
+		self.loginChange();
         self.listChangeBG('.u_title_list tr');
-        self.listChangeBG('.my_collect tr');
+		self.listChangeBG('.my_collect tr');
         self.recomendMusicList();
         self.closeRecommendMusicList();
         self.playMusic();
         self.playBtn();
         // self.progressSlider();
         
-    },
-    musicClassify:function(){
-        var Data       = requestData(),//接收数据文件,0是列表，1是音乐文件
-            Audio      = document.getElementById('Audio'),//获取音乐播放器
-            $SongClass = $('#music_list');
-        var ClassList = Data[0],
-            i = 0,
-            j = 0,
-            cols;
+	},
+	musicClassify:function(){
+		var Data       = requestData(),//接收数据文件,0是列表，1是音乐文件
+			Audio      = document.getElementById('Audio'),//获取音乐播放器
+			$SongClass = $('#music_list');
+		var ClassList = Data[0],
+			i = 0,
+			j = 0,
+			cols;
 
-        for(var i in ClassList){
-            // 渲染大分类列表
-            var list = '<div class="col '+cols+'" id="catalogue'+i+'" data-catogroy="'+i+'">\
-                                <figure>\
-                                    <img src="src/imgs/list'+i+'.jpg" alt="'+ClassList[i]+'" title="'+ClassList[i]+'">\
-                                    <figcaption class="col'+i+'" style="background:url(src/imgs/list'+i+'.png)">\
-                                        <h3>'+ClassList[i]+'</h3>\
-                                        <table class="m_table" cellpadding="0" cellspacing="0">\
+		for(var i in ClassList){
+			// 渲染大分类列表
+			var list = '<div class="col '+cols+'" id="catalogue'+i+'" data-catogroy="'+i+'">\
+			                    <figure>\
+			                        <img src="src/imgs/list'+i+'.jpg" alt="'+ClassList[i]+'" title="'+ClassList[i]+'">\
+			                        <figcaption class="col'+i+'" style="background:url(src/imgs/list'+i+'.png)">\
+			                            <h3>'+ClassList[i]+'</h3>\
+			                            <table class="m_table" cellpadding="0" cellspacing="0">\
                                             <tbody></tbody>\
                                         </table>\
-                                    </figcaption>\
-                                </figure>\
-                            </div>';
-            $SongClass.append(list);    
+			                        </figcaption>\
+			                    </figure>\
+			                </div>';
+			$SongClass.append(list);	
             musicList(parseInt(i));
-        }
+		}
         function musicList(listIndex){
             var musicList = Data[1][listIndex];
             for(var j in musicList){
@@ -86,7 +86,7 @@ player = {
                 $('#catalogue'+listIndex).find('tbody').append(item);
             }
         }
-    },
+	},
     recomMusicBox:function(){//歌单渲染
         var recomMusicDate = recomment(),//接受推荐歌单数据，0是歌单名，1是歌单介绍，2是歌单音乐文件
             Audio      = document.getElementById('Audio'),//获取音乐播放器
@@ -166,15 +166,15 @@ player = {
             }
         })
     },
-    login:function(){//登陆显示、注册切换
-        $('#js-login').on("click",function(){
-            $('.modal-backdropss').show();
-            $('#signin').show();
-        });
-        $('.modal-backdropss').on('click',function() {
-            $('#signin').hide();
-            $(this).hide();
-        });
+	login:function(){//登陆显示、注册切换
+		$('#js-login').on("click",function(){
+			$('.modal-backdropss').show();
+			$('#signin').show();
+		});
+		$('.modal-backdropss').on('click',function() {
+			$('#signin').hide();
+			$(this).hide();
+		});
         $('#signin-btn').on('click',function(){//登陆ajax请求
             $.ajax({
                 url:'server.php/login',
@@ -242,7 +242,7 @@ player = {
                 }
             })
         });
-    },
+	},
     fromValidate:function(){//表单验证
         function errorType(_name){//正则判断返回结果
             if( _name == ""){ 
@@ -292,13 +292,13 @@ player = {
         });
 
     },
-    closeLogin:function(){
-        $('.rl-close').on('click',function(){
-            $('.modal-backdrop').trigger('click');
-        })
-    },
-    bannerPlay:function(){// 首页轮播图-渐变
-        var banner = $('.turning_box'),
+	closeLogin:function(){
+		$('.rl-close').on('click',function(){
+			$('.modal-backdrop').trigger('click');
+		})
+	},
+	bannerPlay:function(){// 首页轮播图-渐变
+		var banner = $('.turning_box'),
             slides = banner.find('.banner-slide'),
             dotContainer = banner.find('.banner-dots'),
             dotTpl = '',
@@ -370,18 +370,18 @@ player = {
         next();
         autoPlay();
     
-    },
-    voiceShow:function(){// 音量调节显示
-        var self = this,
+	},
+	voiceShow:function(){// 音量调节显示
+		var self = this,
         $vol = $('.play-banner').find("#vol");
-        $vol.on("click",function(){
-            $('.play-banner').find('.m-vol').toggle();
-        });
+		$vol.on("click",function(){
+			$('.play-banner').find('.m-vol').toggle();
+		});
         self.volumeSlider();
-    },
-    collect:function(heart){// 收藏
-        var $heart = $(heart);
-        $heart.on('click',function(){
+	},
+	collect:function(heart){// 收藏
+		var $heart = $(heart);
+		$heart.on('click',function(){
             if(defaults.isLogin == 0){
                 $('#js-login').trigger('click');
             }else{
@@ -409,8 +409,8 @@ player = {
                 // });
                 
             }
-        });
-    },
+		});
+	},
     adds:function(adds){//添加
         var $adds = $(adds);
         $adds.on('click',function(){
@@ -461,7 +461,7 @@ player = {
             // });
         });
     },
-    floatLabel:function (inputType) {//登录注册输入框，提示上浮
+	floatLabel:function (inputType) {//登录注册输入框，提示上浮
         $(inputType).each(function () {
             var $this = $(this);
             $this.focus(function () {
@@ -476,9 +476,9 @@ player = {
     },
     navSwitch:function (){//导航切换
         var self = this;
-        $('.header-wrap li').find('a').on('click',function() {
-            var order = $(this).attr('data-icon');
-            $(this).parents('li').addClass('active').siblings().removeClass('active');
+    	$('.header-wrap li').find('a').on('click',function() {
+    		var order = $(this).attr('data-icon');
+			$(this).parents('li').addClass('active').siblings().removeClass('active');
     
             if(order == 2 || order == 3){
                 if(defaults.isLogin == 0){
@@ -560,26 +560,26 @@ player = {
             }else{
                 $('.main-box').removeClass('control0 control1 control2 control3').addClass('control'+order);
             }
-        });
+    	});
     },
     loginChange:function(){//登录、注册切换
-        $('.change_link').on('click', 'a', function() {
-            if($(this).hasClass('log')){
-                $('#login').show();
-                $('#register').hide();
+    	$('.change_link').on('click', 'a', function() {
+    		if($(this).hasClass('log')){
+    			$('#login').show();
+    	    	$('#register').hide();
 
-            }else{
-                $('#login').hide();
-                $('#register').show();
-            }
-        });
+    		}else{
+	    		$('#login').hide();
+	    	    $('#register').show();
+    		}
+    	});
     },
     listChangeBG:function(list){//隔行变色
-        var list = $(list);
-        for(var i = 0 ; i < list.length ; i++){
-            if( i % 2 != 0)
-                $(list[i]).css('background','#f7f7f7');
-        }
+    	var list = $(list);
+    	for(var i = 0 ; i < list.length ; i++){
+    		if( i % 2 != 0)
+    			$(list[i]).css('background','#f7f7f7');
+    	}
     },
     recomendMusicList:function(){//音乐推荐弹出详细列表
         $('.music_item').on('click','a',function(){
@@ -614,14 +614,19 @@ player = {
                 musicCurrentTime = $plyBanner.find('.time em');
 
             console.log(musicSrc);
+            // if($(Audio).attr('src') != ''){
+            //     // $(Audio).attr({'src':''})
+            //     Audio.pause();
+            //     Audio.currentTime = 0;
+            // }
             $(Audio).attr({'src':musicSrc});
             Audio.load();//加载歌曲
+            
             
             // AllRun();
             self.showMusicDetail(musicId,musicName,musicSinger,musicImg,musicSrc);
 
             Audio.addEventListener("loadeddata", function() {//歌曲加载完毕
-
                     Audio.play();//播放歌曲
                     $('.play-banner .album-cover').addClass('play-rotate');
                     self.timeConversion(Audio.duration,'b');//显示当前歌曲时长
@@ -742,8 +747,7 @@ player = {
                 $progressBar.width(_left);
                 Audio.currentTime = _left / 220 * Audio.duration;
             }
-        })
-        $(document).on('mouseup',function(){
+        }).on('mouseup',function(){
             status = false;
             Audio.play();
         })
@@ -819,17 +823,17 @@ player = {
 
 
 $(function () {
-    player.init();
+	player.init();
 });
 
 // (function($){
-//  // Settings
-//  var repeat = localStorage.repeat || 0,//通过localstorage来 ，控制重复 （1为循环重复播放，0为不循环播放）
-//      shuffle = localStorage.shuffle || 'false',//通过localStorage 来，控制播放是否为随机 （true为随机，false为顺序）
-//      continous = true,
-//      autoplay = true,
-//      playlist = [
-//      {
+// 	// Settings
+// 	var repeat = localStorage.repeat || 0,//通过localstorage来 ，控制重复 （1为循环重复播放，0为不循环播放）
+// 		shuffle = localStorage.shuffle || 'false',//通过localStorage 来，控制播放是否为随机 （true为随机，false为顺序）
+// 		continous = true,
+// 		autoplay = true,
+// 		playlist = [
+// 		{
 // title: '德国第一装甲师进行曲',
 // artist: '德国',
 // album: '德国第一装甲师进行曲.mp3',
@@ -854,209 +858,209 @@ $(function () {
 // ogg: ''
 // },];
 
-//  // Load playlist
-//  for (var i=0; i<playlist.length; i++){
-//      var item = playlist[i];
-//      $('#playlist').append('<li>'+item.artist+' - '+item.title+'</li>');
-//  }
+// 	// Load playlist
+// 	for (var i=0; i<playlist.length; i++){
+// 		var item = playlist[i];
+// 		$('#playlist').append('<li>'+item.artist+' - '+item.title+'</li>');
+// 	}
 
-//  var time = new Date(),
-//      currentTrack = shuffle === 'true' ? time.getTime() % playlist.length : 0,
-//      trigger = false,
-//      audio, timeout, isPlaying, playCounts;
+// 	var time = new Date(),
+// 		currentTrack = shuffle === 'true' ? time.getTime() % playlist.length : 0,
+// 		trigger = false,
+// 		audio, timeout, isPlaying, playCounts;
 
-//  var play = function(){
-//      audio.play();
-//      $('.playback').addClass('playing');
-//      timeout = setInterval(updateProgress, 500);
-//      isPlaying = true;
-//  }
+// 	var play = function(){
+// 		audio.play();
+// 		$('.playback').addClass('playing');
+// 		timeout = setInterval(updateProgress, 500);
+// 		isPlaying = true;
+// 	}
 
-//  var pause = function(){
-//      audio.pause();
-//      $('.playback').removeClass('playing');
-//      clearInterval(updateProgress);
-//      isPlaying = false;
-//  }
+// 	var pause = function(){
+// 		audio.pause();
+// 		$('.playback').removeClass('playing');
+// 		clearInterval(updateProgress);
+// 		isPlaying = false;
+// 	}
 
-//  // Update progress
-//  var setProgress = function(value){
-//      var currentSec = parseInt(value%60) < 10 ? '0' + parseInt(value%60) : parseInt(value%60),
-//          ratio = value / audio.duration * 100;
+// 	// Update progress
+// 	var setProgress = function(value){
+// 		var currentSec = parseInt(value%60) < 10 ? '0' + parseInt(value%60) : parseInt(value%60),
+// 			ratio = value / audio.duration * 100;
 
-//      $('.timer').html(parseInt(value/60)+':'+currentSec);
-//      $('.progress .pace').css('width', ratio + '%');
-//      $('.progress .slider a').css('left', ratio + '%');
-//  }
+// 		$('.timer').html(parseInt(value/60)+':'+currentSec);
+// 		$('.progress .pace').css('width', ratio + '%');
+// 		$('.progress .slider a').css('left', ratio + '%');
+// 	}
 
-//  var updateProgress = function(){
-//      setProgress(audio.currentTime);
-//  }
+// 	var updateProgress = function(){
+// 		setProgress(audio.currentTime);
+// 	}
 
-//  // Progress slider
-//  $('.progress .slider').slider({step: 0.1, slide: function(event, ui){
-//      $(this).addClass('enable');
-//      setProgress(audio.duration * ui.value / 100);
-//      clearInterval(timeout);
-//  }, stop: function(event, ui){
-//      audio.currentTime = audio.duration * ui.value / 100;
-//      $(this).removeClass('enable');
-//      timeout = setInterval(updateProgress, 500);
-//  }});
+// 	// Progress slider
+// 	$('.progress .slider').slider({step: 0.1, slide: function(event, ui){
+// 		$(this).addClass('enable');
+// 		setProgress(audio.duration * ui.value / 100);
+// 		clearInterval(timeout);
+// 	}, stop: function(event, ui){
+// 		audio.currentTime = audio.duration * ui.value / 100;
+// 		$(this).removeClass('enable');
+// 		timeout = setInterval(updateProgress, 500);
+// 	}});
 
-//  // Volume slider
-//  var setVolume = function(value){
-//      audio.volume = localStorage.volume = value;
-//      $('.volume .pace').css('width', value * 100 + '%');
-//      $('.volume .slider a').css('left', value * 100 + '%');
-//  }
+// 	// Volume slider
+// 	var setVolume = function(value){
+// 		audio.volume = localStorage.volume = value;
+// 		$('.volume .pace').css('width', value * 100 + '%');
+// 		$('.volume .slider a').css('left', value * 100 + '%');
+// 	}
 
-//  var volume = localStorage.volume || 0.5;
-//  $('.volume .slider').slider({max: 1, min: 0, step: 0.01, value: volume, slide: function(event, ui){
-//      setVolume(ui.value);
-//      $(this).addClass('enable');
-//      $('.mute').removeClass('enable');
-//  }, stop: function(){
-//      $(this).removeClass('enable');
-//  }}).children('.pace').css('width', volume * 100 + '%');
+// 	var volume = localStorage.volume || 0.5;
+// 	$('.volume .slider').slider({max: 1, min: 0, step: 0.01, value: volume, slide: function(event, ui){
+// 		setVolume(ui.value);
+// 		$(this).addClass('enable');
+// 		$('.mute').removeClass('enable');
+// 	}, stop: function(){
+// 		$(this).removeClass('enable');
+// 	}}).children('.pace').css('width', volume * 100 + '%');
 
-//  $('.mute').click(function(){
-//      if ($(this).hasClass('enable')){
-//          setVolume($(this).data('volume'));
-//          $(this).removeClass('enable');
-//      } else {
-//          $(this).data('volume', audio.volume).addClass('enable');
-//          setVolume(0);
-//      }
-//  });
+// 	$('.mute').click(function(){
+// 		if ($(this).hasClass('enable')){
+// 			setVolume($(this).data('volume'));
+// 			$(this).removeClass('enable');
+// 		} else {
+// 			$(this).data('volume', audio.volume).addClass('enable');
+// 			setVolume(0);
+// 		}
+// 	});
 
-//  // Switch track
-//  var switchTrack = function(i){
-//      if (i < 0){
-//          track = currentTrack = playlist.length - 1;
-//      } else if (i >= playlist.length){
-//          track = currentTrack = 0;
-//      } else {
-//          track = i;
-//      }
+// 	// Switch track
+// 	var switchTrack = function(i){
+// 		if (i < 0){
+// 			track = currentTrack = playlist.length - 1;
+// 		} else if (i >= playlist.length){
+// 			track = currentTrack = 0;
+// 		} else {
+// 			track = i;
+// 		}
 
-//      $('audio').remove();
-//      loadMusic(track);
-//      if (isPlaying == true) play();
-//  }
+// 		$('audio').remove();
+// 		loadMusic(track);
+// 		if (isPlaying == true) play();
+// 	}
 
-//  // Shuffle
-//  var shufflePlay = function(){
-//      var time = new Date(),
-//          lastTrack = currentTrack;
-//      currentTrack = time.getTime() % playlist.length;
-//      if (lastTrack == currentTrack) ++currentTrack;
-//      switchTrack(currentTrack);
-//  }
+// 	// Shuffle
+// 	var shufflePlay = function(){
+// 		var time = new Date(),
+// 			lastTrack = currentTrack;
+// 		currentTrack = time.getTime() % playlist.length;
+// 		if (lastTrack == currentTrack) ++currentTrack;
+// 		switchTrack(currentTrack);
+// 	}
 
-//  // Fire when track ended
-//  var ended = function(){
-//      pause();
-//      audio.currentTime = 0;
-//      playCounts++;
-//      if (continous == true) isPlaying = true;
-//      if (repeat == 1){
-//          play();
-//      } else {
-//          if (shuffle === 'true'){
-//              shufflePlay();
-//          } else {
-//              if (repeat == 2){
-//                  switchTrack(++currentTrack);
-//              } else {
-//                  if (currentTrack < playlist.length) switchTrack(++currentTrack);
-//              }
-//          }
-//      }
-//  }
+// 	// Fire when track ended
+// 	var ended = function(){
+// 		pause();
+// 		audio.currentTime = 0;
+// 		playCounts++;
+// 		if (continous == true) isPlaying = true;
+// 		if (repeat == 1){
+// 			play();
+// 		} else {
+// 			if (shuffle === 'true'){
+// 				shufflePlay();
+// 			} else {
+// 				if (repeat == 2){
+// 					switchTrack(++currentTrack);
+// 				} else {
+// 					if (currentTrack < playlist.length) switchTrack(++currentTrack);
+// 				}
+// 			}
+// 		}
+// 	}
 
-//  var beforeLoad = function(){
-//      var endVal = this.seekable && this.seekable.length ? this.seekable.end(0) : 0;
-//      $('.progress .loaded').css('width', (100 / (this.duration || 1) * endVal) +'%');
-//  }
+// 	var beforeLoad = function(){
+// 		var endVal = this.seekable && this.seekable.length ? this.seekable.end(0) : 0;
+// 		$('.progress .loaded').css('width', (100 / (this.duration || 1) * endVal) +'%');
+// 	}
 
-//  // Fire when track loaded completely
-//  var afterLoad = function(){
-//      if (autoplay == true) play();
-//  }
+// 	// Fire when track loaded completely
+// 	var afterLoad = function(){
+// 		if (autoplay == true) play();
+// 	}
 
-//  // Load track
-//  var loadMusic = function(i){
-//      var item = playlist[i],
-//          newaudio = $('<audio>').html('<source src="'+item.mp3+'"><source src="'+item.ogg+'">').appendTo('#player');
-        
-//      $('.cover').html('<img src="'+item.cover+'" alt="'+item.album+'">');
-//      $('.tag').html('<strong>'+item.title+'</strong><span class="artist">'+item.artist+'</span><span class="album">'+item.album+'</span>');
-//      $('#playlist li').removeClass('playing').eq(i).addClass('playing');
-//      audio = newaudio[0];
-//      audio.volume = $('.mute').hasClass('enable') ? 0 : volume;
-//      audio.addEventListener('progress', beforeLoad, false);
-//      audio.addEventListener('durationchange', beforeLoad, false);
-//      audio.addEventListener('canplay', afterLoad, false);
-//      audio.addEventListener('ended', ended, false);
-//  }
+// 	// Load track
+// 	var loadMusic = function(i){
+// 		var item = playlist[i],
+// 			newaudio = $('<audio>').html('<source src="'+item.mp3+'"><source src="'+item.ogg+'">').appendTo('#player');
+		
+// 		$('.cover').html('<img src="'+item.cover+'" alt="'+item.album+'">');
+// 		$('.tag').html('<strong>'+item.title+'</strong><span class="artist">'+item.artist+'</span><span class="album">'+item.album+'</span>');
+// 		$('#playlist li').removeClass('playing').eq(i).addClass('playing');
+// 		audio = newaudio[0];
+// 		audio.volume = $('.mute').hasClass('enable') ? 0 : volume;
+// 		audio.addEventListener('progress', beforeLoad, false);
+// 		audio.addEventListener('durationchange', beforeLoad, false);
+// 		audio.addEventListener('canplay', afterLoad, false);
+// 		audio.addEventListener('ended', ended, false);
+// 	}
 
-//  loadMusic(currentTrack);
-//  $('.playback').on('click', function(){
-//      if ($(this).hasClass('playing')){
-//          pause();
-//      } else {
-//          play();
-//      }
-//  });
-//  $('.rewind').on('click', function(){
-//      if (shuffle === 'true'){
-//          shufflePlay();
-//      } else {
-//          switchTrack(--currentTrack);
-//      }
-//  });
-//  $('.fastforward').on('click', function(){
-//      if (shuffle === 'true'){
-//          shufflePlay();
-//      } else {
-//          switchTrack(++currentTrack);
-//      }
-//  });
-//  $('#playlist li').each(function(i){
-//      var _i = i;
-//      $(this).on('click', function(){
-//          switchTrack(_i);
-//      });
-//  });
+// 	loadMusic(currentTrack);
+// 	$('.playback').on('click', function(){
+// 		if ($(this).hasClass('playing')){
+// 			pause();
+// 		} else {
+// 			play();
+// 		}
+// 	});
+// 	$('.rewind').on('click', function(){
+// 		if (shuffle === 'true'){
+// 			shufflePlay();
+// 		} else {
+// 			switchTrack(--currentTrack);
+// 		}
+// 	});
+// 	$('.fastforward').on('click', function(){
+// 		if (shuffle === 'true'){
+// 			shufflePlay();
+// 		} else {
+// 			switchTrack(++currentTrack);
+// 		}
+// 	});
+// 	$('#playlist li').each(function(i){
+// 		var _i = i;
+// 		$(this).on('click', function(){
+// 			switchTrack(_i);
+// 		});
+// 	});
 
-//  if (shuffle === 'true') $('.shuffle').addClass('enable');
-//  if (repeat == 1){
-//      $('.repeat').addClass('once');
-//  } else if (repeat == 2){
-//      $('.repeat').addClass('all');
-//  }
+// 	if (shuffle === 'true') $('.shuffle').addClass('enable');
+// 	if (repeat == 1){
+// 		$('.repeat').addClass('once');
+// 	} else if (repeat == 2){
+// 		$('.repeat').addClass('all');
+// 	}
 
-//  $('.repeat').on('click', function(){
-//      if ($(this).hasClass('once')){
-//          repeat = localStorage.repeat = 2;
-//          $(this).removeClass('once').addClass('all');
-//      } else if ($(this).hasClass('all')){
-//          repeat = localStorage.repeat = 0;
-//          $(this).removeClass('all');
-//      } else {
-//          repeat = localStorage.repeat = 1;
-//          $(this).addClass('once');
-//      }
-//  });
+// 	$('.repeat').on('click', function(){
+// 		if ($(this).hasClass('once')){
+// 			repeat = localStorage.repeat = 2;
+// 			$(this).removeClass('once').addClass('all');
+// 		} else if ($(this).hasClass('all')){
+// 			repeat = localStorage.repeat = 0;
+// 			$(this).removeClass('all');
+// 		} else {
+// 			repeat = localStorage.repeat = 1;
+// 			$(this).addClass('once');
+// 		}
+// 	});
 
-//  $('.shuffle').on('click', function(){
-//      if ($(this).hasClass('enable')){
-//          shuffle = localStorage.shuffle = 'false';
-//          $(this).removeClass('enable');
-//      } else {
-//          shuffle = localStorage.shuffle = 'true';
-//          $(this).addClass('enable');
-//      }
-//  });
+// 	$('.shuffle').on('click', function(){
+// 		if ($(this).hasClass('enable')){
+// 			shuffle = localStorage.shuffle = 'false';
+// 			$(this).removeClass('enable');
+// 		} else {
+// 			shuffle = localStorage.shuffle = 'true';
+// 			$(this).addClass('enable');
+// 		}
+// 	});
 // })(jQuery);

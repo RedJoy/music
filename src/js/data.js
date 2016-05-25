@@ -1,12 +1,12 @@
 
 
 function requestData () {
-    // body...
-    var className = ['影视原声','华语流行','欧美经典','日韩新曲'];//声明类别名称
-    var data = [
-        //第一个类别
-        [
-            
+	// body...
+	var className = ['影视原声','华语流行','欧美经典','日韩新曲'];//声明类别名称
+	var data = [
+		//第一个类别
+		[
+			
             {   
                 'Id':'0',
                 'Name':'To Dartmoor',
@@ -98,7 +98,7 @@ function requestData () {
                 'musicList':'1'
             }
         ],
-        //第二个类别
+		//第二个类别
         [
             {   
                 'Id':'10',
@@ -192,7 +192,7 @@ function requestData () {
             }
 
         ],
-        //第三个类别
+		//第三个类别
         [
             
             {
@@ -381,8 +381,8 @@ function requestData () {
 
         ]
 
-    ];
-    return [className,data];
+	];
+	return [className,data];
 }
 
 function recomment(){
