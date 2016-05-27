@@ -404,49 +404,49 @@ function recomment(){
         //你问我怎样去远方，我说跟着心走~
         [
             {
-                'Id':'3',
+                'Id':'2',
                 'Name':'Always',
                 'Singer':'太阳的后裔',
                 'Src':'storage/songs/always.mp3',
                 'Img':'src/imgs/list1-3.jpg'
             },
             {
-                'Id':'33',
+                'Id':'32',
                 'Name':'Some',
                 'Singer':'Junggigo、昭宥',
                 'Src':'storage/songs/Some.mp3',
                 'Img':'src/imgs/list4-3.jpg'
             },
             {
-                'Id':'35',
+                'Id':'34',
                 'Name':'不能分手的女人不能离开的男人',
                 'Singer':'leessang',
                 'Src':'storage/songs/不能分手的女人不能离开的男人.mp3',
                 'Img':'src/imgs/list4-5.jpg'
             },
             {
-                'Id':'18',
+                'Id':'17',
                 'Name':'普通朋友',
                 'Singer':'陶喆',
                 'Src':'storage/songs/普通朋友.mp3',
                 'Img':'src/imgs/list2-8.jpg',
             },
             {
-                'Id':'11',
+                'Id':'10',
                 'Name':'好久不见',
                 'Singer':'陈奕迅',
                 'Src':'storage/songs/好久不见.mp3',
                 'Img':'src/imgs/list2-1.jpg'
             },
             {
-                'Id':'4',
+                'Id':'3',
                 'Name':'红颜旧',
                 'Singer':'刘涛',
                 'Src':'storage/songs/红颜旧.mp3',
                 'Img':'src/imgs/list1-4.jpg'
             },
             {
-                'Id':'5',
+                'Id':'4',
                 'Name':'一直很安静',
                 'Singer':'阿桑(仙剑一)',
                 'Src':'storage/songs/一直很安静.mp3',
@@ -455,49 +455,49 @@ function recomment(){
         ],
         [//种在耳朵里的歌开出了青春的花
             {
-                'Id':'36',
+                'Id':'35',
                 'Name':'夏夕空',
                 'Singer':'夏目友人帐',
                 'Src':'storage/songs/夏夕空.mp3',
                 'Img':'src/imgs/list4-6.jpg'
             },
             {
-                'Id':'20',
+                'Id':'19',
                 'Name':'很靠近海',
                 'Singer':'蔡健雅',
                 'Src':'storage/songs/很靠近海.mp3',
                 'Img':'src/imgs/list2-10.jpg'
             },
             {
-                'Id':'',
+                'Id':'18',
                 'Name':'旅行的意义',
                 'Singer':'陈绮贞',
                 'Src':'storage/songs/旅行的意义.mp3',
                 'Img':'src/imgs/list2-9.jpg'
             },
             {
-                'Id':'6',
+                'Id':'5',
                 'Name':'时间煮雨',
                 'Singer':'郁可唯(小时代)',
                 'Src':'storage/songs/时间煮雨.mp3',
                 'Img':'src/imgs/list1-9.jpg'
             },
             {
-                'Id':'16',
+                'Id':'15',
                 'Name':'南山南',
                 'Singer':'张磊',
                 'Src':'storage/songs/南山南.mp3',
                 'Img':'src/imgs/list2-6.jpg'
             },
             {
-                'Id':'9',
+                'Id':'8',
                 'Name':'热雪',
                 'Singer':'小时代',
                 'Src':'storage/songs/热雪.mp3',
                 'Img':'src/imgs/list1-6.jpg'
             },
             {
-                'Id':'22',
+                'Id':'21',
                 'Name':'Ours',
                 'Singer':'Taylor Swift',
                 'Src':'storage/songs/Ours.mp3',
@@ -507,42 +507,42 @@ function recomment(){
         ],
         [//如果时光倒流，我在回忆里等你
             {
-                'Id':'32',
+                'Id':'31',
                 'Name':"人情味",
                 'Singer':'Gary、郑仁',
                 'Src':"storage/songs/人情味.mp3",
                 'Img':'src/imgs/list4-2.jpg'
             },
             {
-                'Id':'8',
+                'Id':'7',
                 'Name':'Davichi',
                 'Singer':'没关系,是爱情啊',
                 'Src':'storage/songs/Davichi.mp3',
                 'Img':'src/imgs/list1-8.jpg'
             },
             {
-                'Id':'10',
+                'Id':'9',
                 'Name':'江湖笑',
                 'Singer':'神雕侠侣',
                 'Src':'imagsong/江湖笑.mp3',
                 'Img':'src/imgs/list1-10.jpg'
             },
             {
-                'Id':'29',
+                'Id':'28',
                 'Name':'Let It Go',
                 'Singer':'Demi Lovato',
                 'Src':'storage/songs/Let It Go.mp3',
                 'Img':'src/imgs/list3-9.jpg'
             },
             {
-                'Id':'27',
+                'Id':'26',
                 'Name':'Innocence',
                 'Singer':'Avril Lavigne',
                 'Src':'storage/songs/Innocence.mp3',
                 'Img':'src/imgs/list3-7.jpg'
             },
             {
-                'Id':'26',
+                'Id':'25',
                 'Name':'Rolling in the Deep',
                 'Singer':'Adele',
                 'Src':'storage/songs/Rolling in the Deep.mp3',
@@ -551,42 +551,42 @@ function recomment(){
         ],
         [//「晨跑必备」炎炎夏日里的一缕清风
             {
-                'Id':'40',
+                'Id':'39',
                 'Name':"咆哮(Growl)",
                 'Singer':'EXO',
                 'Src':"storage/songs/咆哮(Growl).mp3",
                 'Img':'src/imgs/list4-10.jpg'
             },
             {
-                'Id':'38',
+                'Id':'37',
                 'Name':"谎言",
                 'Singer':'BigBang',
                 'Src':"storage/songs/谎言.mp3",
                 'Img':'src/imgs/list4-7.jpg'
             },
             {
-                'Id':'31',
+                'Id':'30',
                 'Name':"Come Back Home",
                 'Singer':'2NE1',
                 'Src':"storage/songs/Come Back Home.mp3",
                 'Img':'src/imgs/list4-1.jpg'
             },
             {
-                'Id':'21',
+                'Id':'20',
                 'Name':'Uptown Funk',
                 'Singer':'Mark Ronson,Bruno Mars',
                 'Src':'storage/songs/Uptown Funk.mp3',
                 'Img':'src/imgs/list3-1.jpg'
             },
             {
-                'Id':'28',
+                'Id':'27',
                 'Name':'Baby One More Time',
                 'Singer':'Britney Spears',
                 'Src':'storage/songs/Baby One More Time.mp3',
                 'Img':'src/imgs/list3-8.jpg'
             },
             {
-                'Id':'25',
+                'Id':'24',
                 'Name':'Diamonds',
                 'Singer':'Rihanna',
                 'Src':'storage/songs/Diamonds.mp3',
@@ -595,42 +595,42 @@ function recomment(){
         ],
         [//入耳惊艳，我为节奏狂
             {
-                'Id':'24',
+                'Id':'23',
                 'Name':'Firework',
                 'Singer':'Katy Perry',
                 'Src':'storage/songs/Firework.mp3',
                 'Img':'src/imgs/list3-4.jpg'
             },
             {
-                'Id':'37',
+                'Id':'36',
                 'Name':'BLUE',
                 'Singer':'Bigbang',
                 'Src':'storage/songs/BLUE.mp3',
                 'Img':'src/imgs/list4-7.jpg'
             },
             {
-                'Id':'30',
+                'Id':'29',
                 'Name':"We Can't Stop",
                 'Singer':'Miley Cyrus',
                 'Src':"storage/songs/We Can't Stop.mp3",
                 'Img':'src/imgs/list3-10.jpg'
             },
             {
-                'Id':'24',
+                'Id':'23',
                 'Name':'Firework',
                 'Singer':'Katy Perry',
                 'Src':'storage/songs/Firework.mp3',
                 'Img':'src/imgs/list3-4.jpg'
             },
             {
-                'Id':'27',
+                'Id':'26',
                 'Name':'Innocence',
                 'Singer':'Avril Lavigne',
                 'Src':'storage/songs/Innocence.mp3',
                 'Img':'src/imgs/list3-7.jpg'
             },
             {
-                'Id':'34',
+                'Id':'33',
                 'Name':'百变小樱',
                 'Singer':'百变小樱',
                 'Src':'storage/songs/百变小樱.mp3',

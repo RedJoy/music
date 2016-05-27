@@ -16,7 +16,7 @@
 				<ul class="clrfix">
 					<li class="active"><a href="javascript:;" data-icon='0'>首页</a></li>
 					<li><a href="javascript:;" data-icon='1'>发现音乐</a></li>
-					<li><a href="javascript:;" data-icon='2'>我的音乐</a></li>
+					<li><a href="javascript:;" data-icon='2'>播放列表</a></li>
 					<li><a href="javascript:;" data-icon='3'>我的收藏</a></li>
 				</ul>
 			</nav>
@@ -79,123 +79,16 @@
 				<img src="src/imgs/noLogin.gif" class="no-login-img"/>
 			</div>
 			<div class="u_title clrfix">
-				<h3 class='l'>歌曲列表</h3>
+				<h3 class='l'>播放列表</h3>
 				<span class="sub l">
 					<span id="flag_trackCount">0</span>
 					首歌
 				</span>
+				<span class="r" >全部播放</span>
 			</div>
 			<div class="u_title_list">
-				<table class="m_table" cellpadding="0" cellspacing="0">
+				<table class="m_table" id="playList" cellpadding="0" cellspacing="0">
 					<tbody>
-						<tr>
-							<td class="m_list_num"><span >1</span></td>
-							<td class="music_name"><div>Teenage Dream</div></td>
-							<td class="music_singer"><div>Katy Perry </div></td>
-							<td class="plays"><div class='play'></div></td>
-							<!-- <td class="adds"><div class="add"></div></td> -->
-							<td class="collects"><div class="heart"></div></td>
-							<td class="dels"><div class="del">-</div></td>
-						</tr>
-						<tr>
-							<td class="m_list_num"><span >1</span></td>
-							<td class="music_name"><div>Teenage Dream</div></td>
-							<td class="music_singer"><div>Katy Perry </div></td>
-							<td class="plays"><div class='play'></div></td>
-							<!-- <td class="adds"><div class="add"></div></td> -->
-							<td class="collects"><div class="heart"></div></td>
-							<td class="dels"><div class="del">-</div></td>
-						</tr>
-						<tr>
-							<td class="m_list_num"><span >1</span></td>
-							<td class="music_name"><div>Teenage Dream</div></td>
-							<td class="music_singer"><div>Katy Perry </div></td>
-							<td class="plays"><div class='play'></div></td>
-							<!-- <td class="adds"><div class="add"></div></td> -->
-							<td class="collects"><div class="heart"></div></td>
-							<td class="dels"><div class="del">-</div></td>
-						</tr>
-						<tr>
-							<td class="m_list_num"><span >1</span></td>
-							<td class="music_name"><div>Teenage Dream</div></td>
-							<td class="music_singer"><div>Katy Perry </div></td>
-							<td class="plays"><div class='play'></div></td>
-							<!-- <td class="adds"><div class="add"></div></td> -->
-							<td class="collects"><div class="heart"></div></td>
-							<td class="dels"><div class="del">-</div></td>
-						</tr>
-						<tr>
-							<td class="m_list_num"><span >1</span></td>
-							<td class="music_name"><div>Teenage Dream</div></td>
-							<td class="music_singer"><div>Katy Perry </div></td>
-							<td class="plays"><div class='play'></div></td>
-							<!-- <td class="adds"><div class="add"></div></td> -->
-							<td class="collects"><div class="heart"></div></td>
-							<td class="dels"><div class="del">-</div></td>
-						</tr>
-						<tr>
-							<td class="m_list_num"><span >1</span></td>
-							<td class="music_name"><div>Teenage Dream</div></td>
-							<td class="music_singer"><div>Katy Perry </div></td>
-							<td class="plays"><div class='play'></div></td>
-							<!-- <td class="adds"><div class="add"></div></td> -->
-							<td class="collects"><div class="heart"></div></td>
-							<td class="dels"><div class="del">-</div></td>
-						</tr>
-						<tr>
-							<td class="m_list_num"><span >1</span></td>
-							<td class="music_name"><div>Teenage Dream</div></td>
-							<td class="music_singer"><div>Katy Perry </div></td>
-							<td class="plays"><div class='play'></div></td>
-							<!-- <td class="adds"><div class="add"></div></td> -->
-							<td class="collects"><div class="heart"></div></td>
-							<td class="dels"><div class="del">-</div></td>
-						</tr>
-						<tr>
-							<td class="m_list_num"><span >1</span></td>
-							<td class="music_name"><div>Teenage Dream</div></td>
-							<td class="music_singer"><div>Katy Perry </div></td>
-							<td class="plays"><div class='play'></div></td>
-							<!-- <td class="adds"><div class="add"></div></td> -->
-							<td class="collects"><div class="heart"></div></td>
-							<td class="dels"><div class="del">-</div></td>
-						</tr>
-						<tr>
-							<td class="m_list_num"><span >1</span></td>
-							<td class="music_name"><div>Teenage Dream</div></td>
-							<td class="music_singer"><div>Katy Perry </div></td>
-							<td class="plays"><div class='play'></div></td>
-							<!-- <td class="adds"><div class="add"></div></td> -->
-							<td class="collects"><div class="heart"></div></td>
-							<td class="dels"><div class="del">-</div></td>
-						</tr>
-						<tr>
-							<td class="m_list_num"><span >1</span></td>
-							<td class="music_name"><div>Teenage Dream</div></td>
-							<td class="music_singer"><div>Katy Perry </div></td>
-							<td class="plays"><div class='play'></div></td>
-							<!-- <td class="adds"><div class="add"></div></td> -->
-							<td class="collects"><div class="heart"></div></td>
-							<td class="dels"><div class="del">-</div></td>
-						</tr>
-						<tr>
-							<td class="m_list_num"><span >1</span></td>
-							<td class="music_name"><div>Teenage Dream</div></td>
-							<td class="music_singer"><div>Katy Perry </div></td>
-							<td class="plays"><div class='play'></div></td>
-							<!-- <td class="adds"><div class="add"></div></td> -->
-							<td class="collects"><div class="heart"></div></td>
-							<td class="dels"><div class="del">-</div></td>
-						</tr>
-						<tr>
-							<td class="m_list_num"><span >1</span></td>
-							<td class="music_name"><div>Teenage Dream</div></td>
-							<td class="music_singer"><div>Katy Perry </div></td>
-							<td class="plays"><div class='play'></div></td>
-							<!-- <td class="adds"><div class="add"></div></td> -->
-							<td class="collects"><div class="heart"></div></td>
-							<td class="dels"><div class="del">-</div></td>
-						</tr>
 					</tbody>
 				</table>
 			</div>
@@ -345,9 +238,9 @@
 				</div>
 			</div>
 			<a id="vol" href="javascript:;" hidefocus="true" data-action="volume" class="icn icn-vol"></a>
-			<a href="javascript:;" hidefocus="true" data-action="mode" class="icn icn-loop" title="循环"></a>
-			<a href="javascript:;" hidefocus="true" data-action="like" class="icn icn-add j-flag" title="添加"></a>
-			<div class="heart" rel="unlike"></div>
+			<a href="javascript:;" hidefocus="true" data-action="mode" id="mode" class="icn icn-list" title="单曲循环"></a>
+			<a href="javascript:;" data-action="add" class="icn icn-add j-flag" title="添加到播放列表"></a>
+			<div class="heart" rel="unlike" title="收藏歌曲"></div>
 		</div>
 		<!-- 声音调节 & 播放方式 end -->
 		

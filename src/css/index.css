@@ -248,10 +248,28 @@ header .header-wrap{
 	position: relative;
 	top:8px;
 	left:20px;
-	background:url("../imgs/topbar1.png") -186px -35px;
+	background:url("../imgs/topbar1.png") -186px -217px;
 }
 .play-banner .vol-box .icn-loop:hover{
+	background:url("../imgs/topbar1.png") -213px -217px;
+}
+.play-banner .vol-box .icn-random{
+	position: relative;
+	top:8px;
+	left:20px;
+	background:url("../imgs/topbar1.png") -186px -35px;
+}
+.play-banner .vol-box .icn-random:hover{
 	background:url("../imgs/topbar1.png") -213px -35px;
+}
+.play-banner .vol-box .icn-list{
+	position: relative;
+	top:8px;
+	left:20px;
+	background:url("../imgs/topbar1.png") -124px -217px;
+}
+.play-banner .vol-box .icn-list:hover{
+	background:url("../imgs/topbar1.png") -154px -217px;
 }
 .play-banner .vol-box .icn-add{
 	position: relative;
@@ -1078,6 +1096,12 @@ figure span {
 
 .u_title_list tr{
 	height:47px;
+}
+.u_title_list .active{
+	background: rgba(211,211,211,0.5) !important;
+}
+.u_title_list .active td:first-child{
+	border-left: 2px solid red;
 }
 .u_title_list .m_list_num,
 .u_title_list .plays,
