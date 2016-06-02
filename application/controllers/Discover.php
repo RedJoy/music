@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Discover extends RJ_Controller {
+class Discover extends CI_Controller {
     
     // protected $_genre = array();
 
@@ -14,19 +14,21 @@ class Discover extends RJ_Controller {
     }
     
     // Get All Collects
-    public function index_get() 
+    public function index() 
     {
         $lista = $this->song->get_many_by(array('genre'=>1));
         $listb = $this->song->get_many_by(array('genre'=>2));
         $listc = $this->song->get_many_by(array('genre'=>3));
         $listd = $this->song->get_many_by(array('genre'=>4));
 
-        $this->response(array(
+        echo json_encode(array(
             '1' => $lista, 
             '2' => $listb, 
             '3' => $listc, 
             '4' => $listd 
         ));
+
+        return TRUE;
     }
     
 }
