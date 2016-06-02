@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Collect_model extends RJ_Model {
 
-    public $_table = 'songs';
+    public $_table = 'user_collects';
 
     public function __construct()
     {
@@ -21,39 +21,6 @@ class Collect_model extends RJ_Model {
             ->get()->result_array();
             
         return $songs;
-    }
-    
-    // Collect A Song
-    public function collectSong ($user_id, $song_id) 
-    {
-        $collect_id = $this->db->insert('user_collects', array(
-            'user_id' => $user_id, 
-            'song_id' => $song_id
-        ));
-        
-        return $collect_id;
-    }
-    
-    // remove a collect 
-    public function removeCollect ($user_id, $song_id) 
-    {
-        $this->db->delete('user_collects', array(
-            'user_id' => $user_id, 
-            'song_id' => $song_id
-        ));
-        
-        return $this->db->affected_rows();
-    }
-    
-    // determine if user collected a song
-    public function hasCollected ($user_id, $song_id) 
-    {
-        $song = $this->db->get_where('user_collects', array(
-            'user_id' => $user_id, 
-            'song_id' => $song_id
-        ))->result_array();
-        
-        return empty($song) ? FALSE : TRUE;
     }
 
 }

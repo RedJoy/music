@@ -16,21 +16,41 @@ class Collect extends RJ_Controller {
     {
         $list = $this->collect->getUserCollects($this->_u['user_id']);
         
-        $this->response($this->list);
+        $this->response($list);
     }
     
     // Adding song to collect
     public function index_post() 
     {
-        // var_dump($_SESSION);
-        $id = $this->post('id');
-        $this->response($id);
+        $this->load->model('Song_model', 'song');
+        $song_id    = (int) $this->post('id');
+        $song_exsit = $this->song->get($song_id);
+
+        # song exsits ? 
+        if ( ! $song_exsit) 
+            $this->response('song not found!', 400); # Song not found, Bad Request
+
+        $data = array('user_id' => $this->_u['user_id'], 'song_id' => $song_id);
+
+        # collected ?
+        $collected = $this->collect->get_by($data);
+        if ($collected) $this->response('Already Collected!', 400);
+
+        # add to collects
+        $collect_id = $this->collect->insert($data, TRUE);
+
+        if ($collect_id) 
+            $this->response($collect_id);
+        else 
+            $this->response('failed!', 502); # database failure
     }
     
     // Delete song from collect
-    public function index_delete()
+    public function index_delete($id = 0)
     {
-        // 
+        $id = $this->post('id');
+        // var_dump($id);
+        $this->response('OK');
     }
     
 }
