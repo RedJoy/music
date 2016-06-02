@@ -1,14 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Playlist extends RJ_Controller {
-    
-    public static $types = [
-        'drama', 
-        'zhpop', 
-        'ameuro', 
-        'korpan'
-    ];
+class Playlist extends CI_Controller {
     
     public function __construct () 
     {
@@ -19,20 +12,26 @@ class Playlist extends RJ_Controller {
     }
     
     // Get all Playlists
-    public function index_get() 
+    public function index() 
     {
         $id   = $this->input->get('id');
         $list = $this->playlist->get_all();
+
         $this->response($list);
     }
     
     // Get Playlist/songs
-    public function songs_get() 
+    public function songs($id) 
     {
-        $id    = $this->get('id');
         $songs = $this->playlist->getSongs($id);
         
         $this->response($songs);
+    }
+
+    private function response ($data) 
+    {
+        echo json_encode($data);
+        return TRUE;
     }
     
 }
