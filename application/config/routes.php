@@ -54,6 +54,8 @@ $route['login']    = 'user/login';
 $route['info']     = 'user/i';
 $route['logout']   = 'user/logout';
 
+$route['playlist/songs/(:num)'] = 'playlist/songs/id/$1';
+
 $route['default_controller'] = 'welcome';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

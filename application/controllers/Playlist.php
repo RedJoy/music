@@ -18,11 +18,21 @@ class Playlist extends RJ_Controller {
         $this->load->model('Playlist_model', 'playlist');
     }
     
+    // Get all Playlists
     public function index_get() 
     {
         $id   = $this->input->get('id');
         $list = $this->playlist->get_all();
         $this->response($list);
+    }
+    
+    // Get Playlist/songs
+    public function songs_get() 
+    {
+        $id    = $this->get('id');
+        $songs = $this->playlist->getSongs($id);
+        
+        $this->response($songs);
     }
     
 }

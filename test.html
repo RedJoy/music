@@ -120,7 +120,6 @@ $('#rest-action').click(function(){
     $.get(Q.APIROOT + uri, function(res){
         var json = displayJSON(res);
         $('#rest-uri-response').html(json);
-        // console.log(res);
     }, function(){
         console.error('failed');
     }, 'text');
