@@ -3,7 +3,31 @@
 body{
 	overflow: hidden;
 }
-
+/*成功、失败*/
+.ok,.error{
+	display: none;
+	position: fixed;
+	top: 50%;
+	left:50%;
+	width: 100px;
+	height: 60px;
+	margin-top: -50px;
+	margin-left: -30px;
+	font-size: 34px;
+	line-height: 60px;
+	font-weight: 700;
+	z-index: 22;
+	background: #fff;
+	border-radius: 10px;
+	text-align: center;
+	box-shadow: -2px 2px 2px #A7A7A7,-2px 2px 2px #A7A7A7,2px -2px 2px #A7A7A7,2px -2px 2px #A7A7A7;
+}
+.ok{
+	color:#6E811F;
+}
+.error{
+	color:#C20C0C;
+}
 /*顶部导航条*/
 header{
 	width: 100%;
@@ -419,6 +443,9 @@ header .header-wrap{
     -webkit-animation-timing-function: steps(28);
     animation-timing-function: steps(28);
     background-position: right;
+}
+.hearted{
+	background-position: right;
 }
 .heartOver {
     display: inline-block;
@@ -1184,13 +1211,13 @@ figure span {
 	text-align: center;
 }
 .my_collect .no-login h4{
-	font-size: 18px;
+	font-size: 16px;
 	font-weight: normal;
 	line-height: 100px;
 }
 .my_collect .no-login img{
-	width: 400px;
-	height: 400px;
+	width: 300px;
+	height: 300px;
 	border-radius: 50%;
 	display: inline-block;
 }

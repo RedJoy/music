@@ -13,7 +13,9 @@ $.ajax({
     type:'get',
     dataType:'json',
     success:function(datas){
-        musicClassifyList = datas;
+        if(datas.code == 200){
+            musicClassifyList = datas.data;
+        }
     },
     complete:function(){
         player.musicClassify();
@@ -29,7 +31,9 @@ $.ajax({
     type:'get',
     dataType:'json',
     success:function(datas){
-        recomListName = datas;
+        if(datas.code == 200){
+            recomListName = datas.data;
+        }
     },
     complete:function(){
         $.ajax({
@@ -37,7 +41,9 @@ $.ajax({
             type:'get',
             dataType:'json',
             success:function(datas){
-                recomListSong = datas;
+                if(datas.code == 200){
+                    recomListSong = datas.data;
+                }
             },
             complete:function(){
                 player.recomMusicBox();

@@ -107,7 +107,7 @@ player = {
             }
             
             for(var i in music_list){
-                musicalList.push(music_list[i].musicId);
+                musicalList.push(music_list[i].id);
             }
             for(var j in musicalList){//查看播放列表中是否已经存在当前播放歌曲
                 if(parseInt(musicalList[j]) === parseInt(currentId)){
@@ -123,11 +123,11 @@ player = {
                         Audio.loop = '';
                         index = Math.floor(Math.random()*musicalList.length);
                         console.log('ChangeMode 里的index',index);
-                        defaults.id = music_list[index].musicId,
-                        defaults.name = music_list[index].musicName,
-                        defaults.singer = music_list[index].musicSinger,
-                        defaults.src = music_list[index].musicSrc,
-                        defaults.img = music_list[index].musicImg;
+                        defaults.id = music_list[index].id,
+                        defaults.name = music_list[index].title,
+                        defaults.singer = music_list[index].singer,
+                        defaults.src = music_list[index].src,
+                        defaults.img = music_list[index].img;
                     }else{
                         Audio.loop ='';
                         index = parseInt(j)+1;
@@ -135,11 +135,11 @@ player = {
                             index = 0;
                         }
                         console.log("循环播放index:",index);
-                        defaults.id = music_list[index].musicId,
-                        defaults.name = music_list[index].musicName,
-                        defaults.singer = music_list[index].musicSinger,
-                        defaults.src = music_list[index].musicSrc,
-                        defaults.img = music_list[index].musicImg;
+                        defaults.id = music_list[index].id,
+                        defaults.name = music_list[index].title,
+                        defaults.singer = music_list[index].singer,
+                        defaults.src = music_list[index].src,
+                        defaults.img = music_list[index].img;
                     }
                 }
             }
@@ -155,7 +155,7 @@ player = {
             musicalList = new Array();
         music_list = JSON.parse(localStorage.musicList);
         for(var i in music_list){
-            musicalList.push(music_list[i].musicId);
+            musicalList.push(music_list[i].id);
         }
         for( j in musicalList){//查看播放列表中是否已经存在当前播放歌曲
             if(parseInt(musicalList[j]) === parseInt(musicId)){
@@ -364,6 +364,9 @@ player = {
                         if(localStorage.musicList != ''){
                             localStorage.musicList = '';
                         }
+                        if(localStorage.collectList != ''){
+                            localStorage.collectList = '';
+                        }
                     }else{
                         console.log('error');
                         defaults.isLogin = 1;
@@ -542,17 +545,18 @@ player = {
 
                     if(musicLists.length > 11){
                         $('.my_music').find('.list-nxt').show();
+                        $('.my_music').find('.list-pre').hide();
                         for(var i = 0;i < 11; i++){
                             var num = parseInt(i)+1;
-                            if(parseInt(musicLists[i].musicId) === parseInt(currentId)){
+                            if(parseInt(musicLists[i].id) === parseInt(currentId)){
                                 var current = 'class="active"';
                             }else{
                                 var current = '';
                             }
-                            var list = '<tr '+current+' data-id="'+musicLists[i].musicId+'" data-src="'+musicLists[i].musicSrc+'" data-img="'+musicLists[i].musicImg+'">\
+                            var list = '<tr '+current+' data-id="'+musicLists[i].id+'" data-src="'+musicLists[i].src+'" data-img="'+musicLists[i].img+'">\
                                             <td class="m_list_num"><span>'+num+'</span></td>\
-                                            <td class="music_name"><div>'+musicLists[i].musicName+'</div></td>\
-                                            <td class="music_singer"><div>'+musicLists[i].musicSinger+'</div></td>\
+                                            <td class="music_name"><div>'+musicLists[i].title+'</div></td>\
+                                            <td class="music_singer"><div>'+musicLists[i].singer+'</div></td>\
                                             <td class="plays"><div class="play"></div></td>\
                                             <td class="collects"><div class="heart"></div></td>\
                                             <td class="dels"><div class="del">-</div></td>\
@@ -565,17 +569,18 @@ player = {
                         $('.my_music').find('.u_title').show();
                         $('.my_music').find('.u_title_list').show();
                     }else{
+                        $('.my_music').find('.list-pre').hide();
                         for(var i = 0;i<musicLists.length; i++){
                             var num = parseInt(i)+1;
-                            if(parseInt(musicLists[i].musicId) === parseInt(currentId)){
+                            if(parseInt(musicLists[i].id) === parseInt(currentId)){
                                 var current = 'class="active"';
                             }else{
                                 var current = '';
                             }
-                            var list = '<tr '+current+' data-id="'+musicLists[i].musicId+'" data-src="'+musicLists[i].musicSrc+'" data-img="'+musicLists[i].musicImg+'">\
+                            var list = '<tr '+current+' data-id="'+musicLists[i].id+'" data-src="'+musicLists[i].src+'" data-img="'+musicLists[i].img+'">\
                                             <td class="m_list_num"><span>'+num+'</span></td>\
-                                            <td class="music_name"><div>'+musicLists[i].musicName+'</div></td>\
-                                            <td class="music_singer"><div>'+musicLists[i].musicSinger+'</div></td>\
+                                            <td class="music_name"><div>'+musicLists[i].title+'</div></td>\
+                                            <td class="music_singer"><div>'+musicLists[i].singer+'</div></td>\
                                             <td class="plays"><div class="play"></div></td>\
                                             <td class="collects"><div class="heart"></div></td>\
                                             <td class="dels"><div class="del">-</div></td>\
@@ -588,8 +593,6 @@ player = {
                         $('.my_music').find('.u_title').show();
                         $('.my_music').find('.u_title_list').show();
                     }
-                    
-                    
                 }
                 self.playMusic("#playList",".play");
                 
@@ -607,55 +610,59 @@ player = {
                         type:'get',
                         dataType:'json',
                         success:function(data){
-                            var datas = data;
-                            localStorage.collectList = JSON.stringify(datas);
-                            if(datas.length == 0){
-                                // $('.my_collect').find('.u_title').hide();
-                                $('.my_collect').find('.u_title_list').hide();
-                                $('.my_collect').find('.no-login').show();
-                            }else {
-                                $('.my_collect').find('#flag_trackCount').text(datas.length);
-                                $('.my_collect').find('.no-login').hide();
-                                $('.my_collect').find('.u_title').show();
-                                if(datas.length > 11){
-                                    $('.my_collect').find('.list-nxt').show();
-                                    for(var i = 0 ;i < 11 ; i++){
-                                        var num = parseInt(i)+1;
-                                        var list = '<tr data-id="'+datas[i].id+'" data-src="'+datas[i].src+'" data-img="'+datas[i].img+'">\
-                                                        <td class="m_list_num"><span>'+num+'</span></td>\
-                                                        <td class="music_name"><div>'+datas[i].title+'</div></td>\
-                                                        <td class="music_singer"><div>'+datas[i].singer+'</div></td>\
-                                                        <td class="plays"><div class="play"></div></td>\
-                                                        <td class="adds"><div class="add"></div></td>\
-                                                        <td class="dels"><div class="del">-</div></td>\
-                                                    </tr>';
-                                        $('.my_collect .u_title_list').find('tbody').append(list);
-                                        $('.my_collect .u_title_list').find('tbody').attr('page-id','1');
+                            if(data.code == 200){
+                                var datas = data.data;
+                                localStorage.collectList = JSON.stringify(datas);
+                                if(datas.length == 0){
+                                    // $('.my_collect').find('.u_title').hide();
+                                    $('.my_collect').find('.u_title_list').hide();
+                                    $('.my_collect').find('.no-login').show();
+                                }else {
+                                    $('.my_collect').find('#flag_trackCount').text(datas.length);
+                                    $('.my_collect').find('.no-login').hide();
+                                    $('.my_collect').find('.u_title').show();
+                                    $('.my_collect').find('.list-pre').hide();
+                                    if(datas.length > 11){
+                                        $('.my_collect').find('.list-nxt').show();
+                                        for(var i = 0 ;i < 11 ; i++){
+                                            var num = parseInt(i)+1;
+                                            var list = '<tr data-id="'+datas[i].id+'" data-src="'+datas[i].src+'" data-img="'+datas[i].img+'">\
+                                                            <td class="m_list_num"><span>'+num+'</span></td>\
+                                                            <td class="music_name"><div>'+datas[i].title+'</div></td>\
+                                                            <td class="music_singer"><div>'+datas[i].singer+'</div></td>\
+                                                            <td class="plays"><div class="play"></div></td>\
+                                                            <td class="adds"><div class="add"></div></td>\
+                                                            <td class="dels"><div class="del">-</div></td>\
+                                                        </tr>';
+                                            $('.my_collect .u_title_list').find('tbody').append(list);
+                                            $('.my_collect .u_title_list').find('tbody').attr('page-id','1');
+                                        }
+                                        self.listChangeBG('.u_title_list tr');
+                                    }else{
+                                        for(var i = 0;i<datas.length; i++){
+                                            var num = parseInt(i)+1;
+                                            var list = '<tr data-id="'+datas[i].id+'" data-src="'+datas[i].src+'" data-img="'+datas[i].img+'">\
+                                                            <td class="m_list_num"><span>'+num+'</span></td>\
+                                                            <td class="music_name"><div>'+datas[i].title+'</div></td>\
+                                                            <td class="music_singer"><div>'+datas[i].singer+'</div></td>\
+                                                            <td class="plays"><div class="play"></div></td>\
+                                                            <td class="adds"><div class="add"></div></td>\
+                                                            <td class="dels"><div class="del">-</div></td>\
+                                                        </tr>';
+                                            $('.my_collect .u_title_list').find('tbody').append(list);
+                                            $('.my_collect .u_title_list').find('tbody').attr('page-id','1');
+                                        }
+                                        self.listChangeBG('.u_title_list tr');
                                     }
-                                    self.listChangeBG('.u_title_list tr');
-                                }else{
-                                    for(var i = 0;i<datas.length; i++){
-                                        var num = parseInt(i)+1;
-                                        var list = '<tr data-id="'+datas[i].id+'" data-src="'+datas[i].src+'" data-img="'+datas[i].img+'">\
-                                                        <td class="m_list_num"><span>'+num+'</span></td>\
-                                                        <td class="music_name"><div>'+datas[i].title+'</div></td>\
-                                                        <td class="music_singer"><div>'+datas[i].singer+'</div></td>\
-                                                        <td class="plays"><div class="play"></div></td>\
-                                                        <td class="collects"><div class="collect"></div></td>\
-                                                        <td class="dels"><div class="del">-</div></td>\
-                                                    </tr>';
-                                        $('.my_collect .u_title_list').find('tbody').append(list);
-                                        $('.my_collect .u_title_list').find('tbody').attr('page-id','1');
-                                    }
-                                    self.listChangeBG('.u_title_list tr');
+                                    $('.my_collect').find('.u_title_list').show();
+                                    self.playMusic("#my_collect",".play");
+                                    self.adds(".adds");
+                                    self.collectDel(".dels");
                                 }
-                                self.playMusic("#my_collect",".play");
-                                self.adds(".adds");
-                                self.collectDel(".dels");
                             }
                         },
                         error:function(data){
-                            console.log(data);
+                            console.log(data.msg);
                         }
                     });
                 }
@@ -668,64 +675,65 @@ player = {
         var Audio = document.getElementById('Audio');//播放器
         var self = this;
         $(type).on('click','.list-nxt',function(){
-            var page = $('.my_music .u_title_list').find('tbody').attr('page-id');
+            var page = $(type).find('tbody').attr('page-id');
             var musicLists = JSON.parse(localStorage[typeList]),
                 currentId = $(Audio).attr('data-id');
                 $(type).find('tbody').html('');
-            function temp(pages,pagenum){
+
+            function temp(pages,pagenum,Leg){
                 for(var i = pagenum ;i < Leg ; i++){
                     var num = parseInt(i)+1;
                     if(typeList == 'musicList'){
-                        if(parseInt(musicLists[i].musicId) === parseInt(currentId)){
+                        if(parseInt(musicLists[i].id) === parseInt(currentId)){
                             var current = 'class="active"';
                         }else{
                             var current = '';
                         }
+                    }else{
+                        var current = '';
                     }
                     
-                    var list = '<tr '+current+' data-id="'+musicLists[i].musicId+'" data-src="'+musicLists[i].musicSrc+'" data-img="'+musicLists[i].musicImg+'">\
+                    var list = '<tr '+current+' data-id="'+musicLists[i].id+'" data-src="'+musicLists[i].src+'" data-img="'+musicLists[i].img+'">\
                                     <td class="m_list_num"><span>'+num+'</span></td>\
-                                    <td class="music_name"><div>'+musicLists[i].musicName+'</div></td>\
-                                    <td class="music_singer"><div>'+musicLists[i].musicSinger+'</div></td>\
+                                    <td class="music_name"><div>'+musicLists[i].title+'</div></td>\
+                                    <td class="music_singer"><div>'+musicLists[i].singer+'</div></td>\
                                     <td class="plays"><div class="play"></div></td>\
                                     <td class="collects"><div class="heart"></div></td>\
                                     <td class="dels"><div class="del">-</div></td>\
                                 </tr>';
-                    $('.my_music .u_title_list').find('tbody').attr('page-id',pages);
-                    $('.my_music .u_title_list').find('tbody').append(list);
+                    $(type).find('tbody').attr('page-id',pages);
+                    $(type).find('tbody').append(list);
+                    
                 }
                 self.listChangeBG('.u_title_list tr');
                 // $('.my_music .u_title').find('#flag_trackCount').html(musicLists.length);
                 $(type).find('.u_title').show();
                 $(type).find('.u_title_list').show();
             }
-            if(page == 1 && musicLists.length > 22){
-                var Leg = 22;
-            }else if(page == 2 && musicLists.length > 33){
-                var Leg = 33;
-            }else if(page == 3){
-                var Leg = musicLists.length;
-            }else{
-                var Leg = musicLists.length;
-            }
-            if(page == 1){
-                temp(2,11);
+            if(page == 1 ){
+                if(musicLists.length >22){
+                    var Leg = 22;
+                    $(type).find('.list-nxt').attr('page-id',3).show();
+                }else{
+                    var Leg = musicLists.length;
+                    $(type).find('.list-nxt').hide();
+                }
+                temp(2,11,Leg);
                 $(type).find('.list-pre').attr('page-id',1).show();
-                if(Leg < 22){
-                    $(type).find('.list-nxt').hide();
-                }
             }else if(page == 2){
-                temp(3,22);
-                $(type).find('.list-pre').attr('page-id',2).show();
-                if(Leg < 33){
+                if(musicLists.length > 33){
+                    var Leg = 33;
+                    $(type).find('.list-nxt').attr('page-id',4).show();
+                }else{
+                    var Leg = musicLists.length;
                     $(type).find('.list-nxt').hide();
                 }
+                temp(3,22,Leg);
+                $(type).find('.list-pre').attr('page-id',2).show();
             }else if(page == 3){
-                temp(4,33);
+                var Leg = musicLists.length;
+                $(type).find('.list-nxt').hide();
                 $(type).find('.list-pre').attr('page-id',3).show();
-                $(type).find('.list-nxt').hide();
-            }else{
-                $(type).find('.list-nxt').hide();
             }
             self.playMusic("#playList",".play");
         });
@@ -734,7 +742,7 @@ player = {
         var Audio = document.getElementById('Audio');//播放器
         var self = this;
         $(type).on('click','.list-pre',function(){
-            var page = $('.my_music .u_title_list').find('tbody').attr('page-id');
+            var page = $(type).find('tbody').attr('page-id');
             var musicLists = JSON.parse(localStorage[typeList]),
                 currentId = $(Audio).attr('data-id');
                 $(type).find('tbody').html('');
@@ -742,17 +750,19 @@ player = {
                 for(var i = pagenum ;i < Leg ; i++){
                     var num = parseInt(i)+1;
                     if(typeList == 'musicList'){
-                        if(parseInt(musicLists[i].musicId) === parseInt(currentId)){
+                        if(parseInt(musicLists[i].id) === parseInt(currentId)){
                             var current = 'class="active"';
                         }else{
                             var current = '';
                         }
+                    }else{
+                        var current = '';
                     }
                     
-                    var list = '<tr '+current+' data-id="'+musicLists[i].musicId+'" data-src="'+musicLists[i].musicSrc+'" data-img="'+musicLists[i].musicImg+'">\
+                    var list = '<tr '+current+' data-id="'+musicLists[i].id+'" data-src="'+musicLists[i].src+'" data-img="'+musicLists[i].img+'">\
                                     <td class="m_list_num"><span>'+num+'</span></td>\
-                                    <td class="music_name"><div>'+musicLists[i].musicName+'</div></td>\
-                                    <td class="music_singer"><div>'+musicLists[i].musicSinger+'</div></td>\
+                                    <td class="music_name"><div>'+musicLists[i].title+'</div></td>\
+                                    <td class="music_singer"><div>'+musicLists[i].singer+'</div></td>\
                                     <td class="plays"><div class="play"></div></td>\
                                     <td class="collects"><div class="heart"></div></td>\
                                     <td class="dels"><div class="del">-</div></td>\
@@ -772,9 +782,11 @@ player = {
             }else if(page == 3){
                 temp(2,11,22);
                 $(type).find('.list-nxt').attr('page-id',3).show();
+                $(type).find('.list-pre').attr('page-id',1).show();
             }else if(page == 4){
                 temp(3,22,33);
                 $(type).find('.list-nxt').attr('page-id',4).show();
+                $(type).find('.list-pre').attr('page-id',2).show();
             }else{
                 $(type).find('.list-pre').hide();
             }
@@ -851,10 +863,10 @@ player = {
             if(localStorage.musicList){
                 music_list = JSON.parse(localStorage.musicList);
                 for( i in music_list){
-                    musicalList.push(music_list[i].musicId);
+                    musicalList.push(music_list[i].id);
                 }
                 for( j in musicalList){//查看播放列表中是否已经存在当前播放歌曲
-                    if(parseInt(musicalList[j]) === parseInt(musicDesc.musicId)){
+                    if(parseInt(musicalList[j]) === parseInt(musicDesc.id)){
                         m = 1;
                         $('#playList').find('tr').removeClass('active');
                         var s = parseInt(j%11);//为了实现分页取与看当前歌曲在当前页中的位置
@@ -876,7 +888,7 @@ player = {
             var currentIds = $(Audio).attr('data-id');
                 music_lists = JSON.parse(localStorage.musicList);
             for(var i in music_lists){
-                musicalLists.push(music_lists[i].musicId);
+                musicalLists.push(music_lists[i].id);
             }
             for(var j in musicalLists){//查看播放列表中是否已经存在当前播放歌曲
                 if(parseInt(musicalLists[j]) === parseInt(currentIds)){
@@ -892,11 +904,11 @@ player = {
                         Audio.loop = '';
                         index = Math.floor(Math.random()*musicalLists.length);
                         console.log('ChangeMode 里的index',index);
-                        defaults.id = music_lists[index].musicId,
-                        defaults.name = music_lists[index].musicName,
-                        defaults.singer = music_lists[index].musicSinger,
-                        defaults.src = music_lists[index].musicSrc,
-                        defaults.img = music_lists[index].musicImg;
+                        defaults.id = music_lists[index].id,
+                        defaults.name = music_lists[index].title,
+                        defaults.singer = music_lists[index].singer,
+                        defaults.src = music_lists[index].src,
+                        defaults.img = music_lists[index].img;
                     }else{
                         Audio.loop ='';
                         index = parseInt(j)+1;
@@ -904,11 +916,11 @@ player = {
                             index = 0;
                         }
                         console.log("循环播放index:",index);
-                        defaults.id = music_lists[index].musicId,
-                        defaults.name = music_lists[index].musicName,
-                        defaults.singer = music_lists[index].musicSinger,
-                        defaults.src = music_lists[index].musicSrc,
-                        defaults.img = music_lists[index].musicImg;
+                        defaults.id = music_lists[index].id,
+                        defaults.name = music_lists[index].title,
+                        defaults.singer = music_lists[index].singer,
+                        defaults.src = music_lists[index].src,
+                        defaults.img = music_lists[index].img;
                     }
                 }
             }
@@ -924,22 +936,6 @@ player = {
             }, 1000);
             self.dragMove();
         }, false);
-
-        // Audio.addEventListener("pause",function() { //监听暂停
-        //     if(!$plyBanner.find('.play').hasClass('pause')){//更改播放按钮
-        //         $plyBanner.find('.play').addClass('pause');
-        //     }
-        //     if (Audio.currentTime == Audio.duration) {
-        //         // Audio.stop();
-        //         Audio.currentTime = 0;
-        //     }
-        // }, false);
-        // Audio.addEventListener("play",function() { //监听暂停
-        //     if(!$plyBanner.find('.play').hasClass('pause')){//更改播放按钮
-        //         $plyBanner.find('.play').addClass('pause');
-        //     }
-        //         // self.dragMove();
-        // }, false);
 
         Audio.addEventListener("ended", function() {//歌曲播放完毕
             Audio.currentTime = 0;
@@ -980,11 +976,11 @@ player = {
                 music_list = [],
                 musicalList = new Array(),
                 musicDesc = {
-                    'musicId' : musicId,
-                    'musicName' : musicName,
-                    'musicSinger' : musicSinger,
-                    'musicSrc' : musicSrc,
-                    'musicImg' : musicImg
+                    'id' : musicId,
+                    'title' : musicName,
+                    'singer' : musicSinger,
+                    'src' : musicSrc,
+                    'img' : musicImg
                 }
                 i = 0,
                 j = 0,
@@ -1153,6 +1149,7 @@ player = {
     collect:function(heart){// 收藏
         var $heart = $(heart);
         $('tbody').delegate(heart,'click',function(){
+            var self = this;
             if(defaults.isLogin == 0){
                 $('#js-login').trigger('click');
             }else{
@@ -1167,14 +1164,21 @@ player = {
                     },
                     dataType:'json',
                     success:function(data){
-                        if($(this).hasClass('heartAnimation')){
-                            $(this).addClass('heartOver').removeClass('heartAnimation');
+                        if(data.code == 200){
+                            if(!$(self).hasClass('hearted')){
+                                $(self).addClass('heartAnimation').addClass('hearted');
+                            }
+                            $('.ok').show();
+                            setTimeout(function(){
+                                $('.ok').hide();
+                            },600);
                         }else{
-                            $(this).addClass('heartAnimation').removeClass('heartOver');
+                            $('.error').show();
+                            setTimeout(function(){
+                                $('.error').hide();
+                            },600);
+                            console.log(data.msg);
                         }
-                    },
-                    error:function(data){
-                            console.log('添加到收藏列表失败');
                     }
                 });
                 
@@ -1184,6 +1188,10 @@ player = {
     adds:function(adds){//添加
         var $adds = $(adds);            
         $adds.on('click',function(){
+            $('.ok').show();
+            setTimeout(function(){
+                $('.ok').hide();
+            },600);
             var $tr = $(this).parents('tr'),
                 musicId = $tr.attr('data-id'),
                 musicSrc = $tr.attr('data-src'),
@@ -1193,11 +1201,11 @@ player = {
                 music_list = [],
                 musicalList = new Array(),
                 musicDesc = {
-                    'musicId' : musicId,
-                    'musicName' : musicName,
-                    'musicSinger' : musicSinger,
-                    'musicSrc' : musicSrc,
-                    'musicImg' : musicImg
+                    'id' : musicId,
+                    'title' : musicName,
+                    'singer' : musicSinger,
+                    'src' : musicSrc,
+                    'img' : musicImg
                 }
                 i = 0,
                 j = 0,
@@ -1205,10 +1213,10 @@ player = {
             if(localStorage.musicList){
                 music_list = JSON.parse(localStorage.musicList);
                 for( i in music_list){
-                    musicalList.push(music_list[i].musicId);
+                    musicalList.push(music_list[i].id);
                 }
                 for( j in musicalList){//查看播放列表中是否已经存在当前添加歌曲
-                    if(parseInt(musicalList[j]) === parseInt(musicDesc.musicId)){
+                    if(parseInt(musicalList[j]) === parseInt(musicDesc.id)){
                         m = 1;
                     }
                 }
@@ -1227,6 +1235,10 @@ player = {
         $('.vol-box').on('click','.icn-add',function(){
             var Audio = document.getElementById('Audio');//获取音乐播放器
             if(typeof $(Audio).attr('src') != 'undefined'){
+                // $('.ok').show();
+                // setTimeout(function(){
+                //     $('.ok').hide();
+                // },600);
                 var musicId = $(Audio).attr('data-id'),
                     musicName = $('.mus-box').find('.mus-name').text(),
                     musicSinger = $('.mus-box').find('.mus-singer').text(),
@@ -1235,11 +1247,11 @@ player = {
                     music_list = [],
                     musicalList = new Array(),
                     musicDesc = {
-                        'musicId' : musicId,
-                        'musicName' : musicName,
-                        'musicSinger' : musicSinger,
-                        'musicSrc' : musicSrc,
-                        'musicImg' : musicImg
+                        'id' : musicId,
+                        'title' : musicName,
+                        'singer' : musicSinger,
+                        'src' : musicSrc,
+                        'img' : musicImg
                     }
                     i = 0,
                     j = 0,
@@ -1247,10 +1259,10 @@ player = {
                 if(localStorage.musicList){
                     music_list = JSON.parse(localStorage.musicList);
                     for( i in music_list){
-                        musicalList.push(music_list[i].musicId);
+                        musicalList.push(music_list[i].id);
                     }
                     for( j in musicalList){//查看播放列表中是否已经存在当前添加歌曲
-                        if(parseInt(musicalList[j]) === parseInt(musicDesc.musicId)){
+                        if(parseInt(musicalList[j]) === parseInt(musicDesc.id)){
                             m = 1;
                         }
                     }
@@ -1285,14 +1297,17 @@ player = {
                         },
                         dataType:'json',
                         success:function(data){
-                            if($(this).hasClass('heartAnimation')){
-                                $(this).addClass('heartOver').removeClass('heartAnimation');
+                            if(data.code == 200){
+                                $('.ok').show();
+                                setTimeout(function(){
+                                    $('.ok').hide();
+                                },600);
                             }else{
-                                $(this).addClass('heartAnimation').removeClass('heartOver');
+                                $('.error').show();
+                                setTimeout(function(){
+                                    $('.error').hide();
+                                },600);
                             }
-                        },
-                        error:function(data){
-                                console.log('添加到收藏列表失败');
                         }
                     });
                     
@@ -1308,7 +1323,7 @@ player = {
                 musicLists = JSON.parse(localStorage.musicList);
 
             for(var i in musicLists){//将歌曲从localStorage里删除
-                if(parseInt(musicId) === parseInt(musicLists[i].musicId)){
+                if(parseInt(musicId) === parseInt(musicLists[i].id)){
                     musicLists.splice(i,1);
                 }
             }
@@ -1322,17 +1337,26 @@ player = {
             //ajax
             var musicId = $(this).parents('tr').attr('data-id');
             $.ajax({
-                url:'server.php/collect',
-                type:'DELETE',
+                url:'server.php/collect/delete',
+                type:'post',
                 data:{
                     id : musicId,
                 },
                 dataType:'json',
                 success:function(data){
-                    $('.header-wrap li').find('a').eq(3).trigger('click');//重新渲染播放列表 
-                },
-                error:function(data){
-                    console.log('删除失败');
+                    if(data.code == 200){
+                        $('.header-wrap li').find('a').eq(3).trigger('click');//重新渲染播放列表 
+                        $('.ok').show();
+                        setTimeout(function(){
+                            $('.ok').hide();
+                        },600);
+                    }else{
+                        $('.error').show();
+                        setTimeout(function(){
+                            $('.error').hide();
+                        },600);
+                        console.log(data.msg);
+                    }
                 }
             });
         });
@@ -1347,11 +1371,11 @@ player = {
                     var music_list = JSON.parse(localStorage.musicList),
                         musicalList = new Array(),
                         musicDesc = {
-                            'musicId' : pre[0].id,
-                            'musicName' : pre[0].name,
-                            'musicSinger' : pre[0].singer,
-                            'musicSrc' : pre[0].src,
-                            'musicImg' : pre[0].img
+                            'id' : pre[0].id,
+                            'title' : pre[0].name,
+                            'singer' : pre[0].singer,
+                            'src' : pre[0].src,
+                            'img' : pre[0].img
                         }
                         i = 0,
                         j = 0,
@@ -1372,11 +1396,11 @@ player = {
                 var music_list = JSON.parse(localStorage.musicList),
                     musicalList = new Array(),
                     musicDesc = {
-                        'musicId' : defaults.id,
-                        'musicName' : defaults.name,
-                        'musicSinger' : defaults.singer,
-                        'musicSrc' : defaults.src,
-                        'musicImg' : defaults.img
+                        'id' : defaults.id,
+                        'title' : defaults.name,
+                        'singer' : defaults.singer,
+                        'src' : defaults.src,
+                        'img' : defaults.img
                     }
                     i = 0,
                     j = 0,
@@ -1391,256 +1415,5 @@ player = {
 
 
 $(function () {
-    player.init();
+    player.init();//初始化
 });
-
-// (function($){
-//  // Settings
-//  var repeat = localStorage.repeat || 0,//通过localstorage来 ，控制重复 （1为循环重复播放，0为不循环播放）
-//      shuffle = localStorage.shuffle || 'false',//通过localStorage 来，控制播放是否为随机 （true为随机，false为顺序）
-//      continous = true,
-//      autoplay = true,
-//      playlist = [
-//      {
-// title: '德国第一装甲师进行曲',
-// artist: '德国',
-// album: '德国第一装甲师进行曲.mp3',
-// cover:'img/1.jpg',
-// mp3: 'mp3/deguo.mp3',
-// ogg: ''
-// },
-// {
-// title: '亡灵序曲',
-// artist: '魔兽世界',
-// album: '魔兽世界 - 亡灵序曲.mp3',
-// cover: 'img/2.jpg',
-// mp3: 'mp3/The Dawn.mp3',
-// ogg: ''
-// },
-// {
-// title: 'chenparty dj.mp3',
-// artist: '德国童声',
-// album: 'chenparty 超好听的德国童声 dj.mp3',
-// cover: 'img/3.jpg',
-// mp3: 'mp3/chenparty dj.mp3',
-// ogg: ''
-// },];
-
-//  // Load playlist
-//  for (var i=0; i<playlist.length; i++){
-//      var item = playlist[i];
-//      $('#playlist').append('<li>'+item.artist+' - '+item.title+'</li>');
-//  }
-
-//  var time = new Date(),
-//      currentTrack = shuffle === 'true' ? time.getTime() % playlist.length : 0,
-//      trigger = false,
-//      audio, timeout, isPlaying, playCounts;
-
-//  var play = function(){
-//      audio.play();
-//      $('.playback').addClass('playing');
-//      timeout = setInterval(updateProgress, 500);
-//      isPlaying = true;
-//  }
-
-//  var pause = function(){
-//      audio.pause();
-//      $('.playback').removeClass('playing');
-//      clearInterval(updateProgress);
-//      isPlaying = false;
-//  }
-
-//  // Update progress
-//  var setProgress = function(value){
-//      var currentSec = parseInt(value%60) < 10 ? '0' + parseInt(value%60) : parseInt(value%60),
-//          ratio = value / audio.duration * 100;
-
-//      $('.timer').html(parseInt(value/60)+':'+currentSec);
-//      $('.progress .pace').css('width', ratio + '%');
-//      $('.progress .slider a').css('left', ratio + '%');
-//  }
-
-//  var updateProgress = function(){
-//      setProgress(audio.currentTime);
-//  }
-
-//  // Progress slider
-//  $('.progress .slider').slider({step: 0.1, slide: function(event, ui){
-//      $(this).addClass('enable');
-//      setProgress(audio.duration * ui.value / 100);
-//      clearInterval(timeout);
-//  }, stop: function(event, ui){
-//      audio.currentTime = audio.duration * ui.value / 100;
-//      $(this).removeClass('enable');
-//      timeout = setInterval(updateProgress, 500);
-//  }});
-
-//  // Volume slider
-//  var setVolume = function(value){
-//      audio.volume = localStorage.volume = value;
-//      $('.volume .pace').css('width', value * 100 + '%');
-//      $('.volume .slider a').css('left', value * 100 + '%');
-//  }
-
-//  var volume = localStorage.volume || 0.5;
-//  $('.volume .slider').slider({max: 1, min: 0, step: 0.01, value: volume, slide: function(event, ui){
-//      setVolume(ui.value);
-//      $(this).addClass('enable');
-//      $('.mute').removeClass('enable');
-//  }, stop: function(){
-//      $(this).removeClass('enable');
-//  }}).children('.pace').css('width', volume * 100 + '%');
-
-//  $('.mute').click(function(){
-//      if ($(this).hasClass('enable')){
-//          setVolume($(this).data('volume'));
-//          $(this).removeClass('enable');
-//      } else {
-//          $(this).data('volume', audio.volume).addClass('enable');
-//          setVolume(0);
-//      }
-//  });
-
-//  // Switch track
-//  var switchTrack = function(i){
-//      if (i < 0){
-//          track = currentTrack = playlist.length - 1;
-//      } else if (i >= playlist.length){
-//          track = currentTrack = 0;
-//      } else {
-//          track = i;
-//      }
-
-//      $('audio').remove();
-//      loadMusic(track);
-//      if (isPlaying == true) play();
-//  }
-
-//  // Shuffle
-//  var shufflePlay = function(){
-//      var time = new Date(),
-//          lastTrack = currentTrack;
-//      currentTrack = time.getTime() % playlist.length;
-//      if (lastTrack == currentTrack) ++currentTrack;
-//      switchTrack(currentTrack);
-//  }
-
-//  // Fire when track ended
-//  var ended = function(){
-//      pause();
-//      audio.currentTime = 0;
-//      playCounts++;
-//      if (continous == true) isPlaying = true;
-//      if (repeat == 1){
-//          play();
-//      } else {
-//          if (shuffle === 'true'){
-//              shufflePlay();
-//          } else {
-//              if (repeat == 2){
-//                  switchTrack(++currentTrack);
-//              } else {
-//                  if (currentTrack < playlist.length) switchTrack(++currentTrack);
-//              }
-//          }
-//      }
-//  }
-
-//  var beforeLoad = function(){
-//      var endVal = this.seekable && this.seekable.length ? this.seekable.end(0) : 0;
-//      $('.progress .loaded').css('width', (100 / (this.duration || 1) * endVal) +'%');
-//  }
-
-//  // Fire when track loaded completely
-//  var afterLoad = function(){
-//      if (autoplay == true) play();
-//  }
-
-//  // Load track
-//  var loadMusic = function(i){
-//      var item = playlist[i],
-//          newaudio = $('<audio>').html('<source src="'+item.mp3+'"><source src="'+item.ogg+'">').appendTo('#player');
-        
-//      $('.cover').html('<img src="'+item.cover+'" alt="'+item.album+'">');
-//      $('.tag').html('<strong>'+item.title+'</strong><span class="artist">'+item.artist+'</span><span class="album">'+item.album+'</span>');
-//      $('#playlist li').removeClass('playing').eq(i).addClass('playing');
-//      audio = newaudio[0];
-//      audio.volume = $('.mute').hasClass('enable') ? 0 : volume;
-//      audio.addEventListener('progress', beforeLoad, false);
-//      audio.addEventListener('durationchange', beforeLoad, false);
-//      audio.addEventListener('canplay', afterLoad, false);
-//      audio.addEventListener('ended', ended, false);
-//  }
-
-//  loadMusic(currentTrack);
-//  $('.playback').on('click', function(){
-//      if ($(this).hasClass('playing')){
-//          pause();
-//      } else {
-//          play();
-//      }
-//  });
-//  $('.rewind').on('click', function(){
-//      if (shuffle === 'true'){
-//          shufflePlay();
-//      } else {
-//          switchTrack(--currentTrack);
-//      }
-//  });
-//  $('.fastforward').on('click', function(){
-//      if (shuffle === 'true'){
-//          shufflePlay();
-//      } else {
-//          switchTrack(++currentTrack);
-//      }
-//  });
-//  $('#playlist li').each(function(i){
-//      var _i = i;
-//      $(this).on('click', function(){
-//          switchTrack(_i);
-//      });
-//  });
-
-//  if (shuffle === 'true') $('.shuffle').addClass('enable');
-//  if (repeat == 1){
-//      $('.repeat').addClass('once');
-//  } else if (repeat == 2){
-//      $('.repeat').addClass('all');
-//  }
-
-//  $('.repeat').on('click', function(){
-//      if ($(this).hasClass('once')){
-//          repeat = localStorage.repeat = 2;
-//          $(this).removeClass('once').addClass('all');
-//      } else if ($(this).hasClass('all')){
-//          repeat = localStorage.repeat = 0;
-//          $(this).removeClass('all');
-//      } else {
-//          repeat = localStorage.repeat = 1;
-//          $(this).addClass('once');
-//      }
-//  });
-
-//  $('.shuffle').on('click', function(){
-//      if ($(this).hasClass('enable')){
-//          shuffle = localStorage.shuffle = 'false';
-//          $(this).removeClass('enable');
-//      } else {
-//          shuffle = localStorage.shuffle = 'true';
-//          $(this).addClass('enable');
-//      }
-//  });
-// })(jQuery);
-//  });
-
-//  $('.shuffle').on('click', function(){
-//      if ($(this).hasClass('enable')){
-//          shuffle = localStorage.shuffle = 'false';
-//          $(this).removeClass('enable');
-//      } else {
-//          shuffle = localStorage.shuffle = 'true';
-//          $(this).addClass('enable');
-//      }
-//  });
-// })(jQuery);
