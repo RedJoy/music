@@ -22,10 +22,10 @@ class Discover extends CI_Controller {
         $listd = $this->song->get_many_by(array('genre'=>4));
 
         echo json_encode(array(
-            '1' => $lista, 
-            '2' => $listb, 
-            '3' => $listc, 
-            '4' => $listd 
+            $lista, 
+            $listb, 
+            $listc, 
+            $listd,
         ));
 
         return TRUE;

@@ -21,10 +21,21 @@ class Playlist extends CI_Controller {
     }
     
     // Get Playlist/songs
-    public function songs($id) 
+    public function songs() 
     {
-        $songs = $this->playlist->getSongs($id);
-        
+        // $songs = $this->playlist->getSongs($id);
+        $lista = $this->playlist->getSongs(1);
+        $listb = $this->playlist->getSongs(2);
+        $listc = $this->playlist->getSongs(3);
+        $listd = $this->playlist->getSongs(4);
+        $liste = $this->playlist->getSongs(5);
+        $songs =array(
+            $lista, 
+            $listb, 
+            $listc, 
+            $listd,
+            $liste,
+        );
         $this->response($songs);
     }
 

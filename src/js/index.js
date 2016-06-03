@@ -1,7 +1,7 @@
 /*
-	音乐播放器的实质方法体，
-	提供音乐的操控支持
-	提供歌曲分类的生成
+    音乐播放器的实质方法体，
+    提供音乐的操控支持
+    提供歌曲分类的生成
     author:renjing
     date:2016-04
 */
@@ -23,40 +23,49 @@ var defaults ={
     'src':'',
     'img':''
 };
-player = {
-	init:function(){
-		var self = this;
+var pre = [];//存放上一曲播放歌曲
 
-        self.recomMusicBox();
-		self.musicClassify();
+player = {
+    init:function(){
+        var self = this;
+
+        // self.recomMusicBox();
+        // self.musicClassify();
         self.info();
-		self.login();
+        self.login();
         self.fromValidate();
-		self.closeLogin();
-		self.voiceShow();
+        self.closeLogin();
+        self.voiceShow();
         self.mode();
         self.changeMode();
-		self.floatLabel('.ipt');
-		self.navSwitch();
-		self.bannerPlay();
-		self.loginChange();
+        self.floatLabel('.ipt');
+        self.navSwitch();
+        self.bannerPlay();
+        self.loginChange();
         // self.listChangeBG('.u_title_list tr');
-		self.listChangeBG('.my_collect tr');
-        self.recomendMusicList();
-        self.closeRecommendMusicList();
-        self.playMusic('#cata .plays');
-        self.playMusic('#home .plays');
+        self.listChangeBG('.my_collect tr');
+        // self.recomendMusicList();
+        // self.closeRecommendMusicList();
+        // self.playMusic('#cata','.plays');
+        // self.playMusic('#home','.plays');
         self.playBtn();
         self.collect('.heart');
+        self.bannerCollect();
         self.adds('.adds');
         self.bannerAdd();
         self.collectDel('.my_collect .del');
         self.musicListDel("#playList",".del");
-
+        self.nextPlay();
+        self.prePlay();
         
+        self.pageNxt('.my_music','musicList');
+        self.pagePre('.my_music','musicList');
+
+        self.pageNxt('.my_collect','collectList');
+        self.pagePre('.my_collect','collectList');
         // self.progressSlider();
         
-	},
+    },
     mode:function(){//播放模式
         if($('#mode').hasClass('icn-loop')){
             localStorage.mode = 'loop';
@@ -88,6 +97,13 @@ player = {
             }else{
                 $(this).removeClass('icn-list').addClass('icn-loop').attr('title','单曲循环');
                 localStorage.mode = 'loop';
+                defaults = {
+                    'id':'',
+                    'name':'',
+                    'singer':'',
+                    'src':'',
+                    'img':''
+                };
             }
             
             for(var i in music_list){
@@ -127,8 +143,9 @@ player = {
                     }
                 }
             }
+            self.mode();
         });
-        this.mode();
+        
     },
     playListSelect:function(){
         var Audio = document.getElementById('Audio');//播放器
@@ -143,43 +160,45 @@ player = {
         for( j in musicalList){//查看播放列表中是否已经存在当前播放歌曲
             if(parseInt(musicalList[j]) === parseInt(musicId)){
                 $('#playList').find('tr').removeClass('active');
-                $('#playList').find('tr').eq(j).addClass('active');
+                var s = parseInt(j%11);//为了实现分页取与看当前歌曲在当前页中的位置
+                $('#playList').find('tr').eq(s).addClass('active');
             }
         }
     },
-	musicClassify:function(){
-		var Data       = requestData(),//接收数据文件,0是列表，1是音乐文件
-			Audio      = document.getElementById('Audio'),//获取音乐播放器
-			$SongClass = $('#music_list');
-		var ClassList = Data[0],
-			i = 0,
-			j = 0,
-			cols;
+    musicClassify:function(){
+        var Data       = requestData(),//接收数据文件,0是列表，1是音乐文件
+            Audio      = document.getElementById('Audio'),//获取音乐播放器
+            $SongClass = $('#music_list');
+        var ClassList  = Data[0],
+            i = 0,
+            j = 0,
+            cols;
 
-		for(var i in ClassList){
-			// 渲染大分类列表
-			var list = '<div class="col '+cols+'" id="catalogue'+i+'" data-catogroy="'+i+'">\
-			                    <figure>\
-			                        <img src="src/imgs/list'+i+'.jpg" alt="'+ClassList[i]+'" title="'+ClassList[i]+'">\
-			                        <figcaption class="col'+i+'" style="background:url(src/imgs/list'+i+'.png)">\
-			                            <h3>'+ClassList[i]+'</h3>\
-			                            <table class="m_table" id="cata" cellpadding="0" cellspacing="0">\
+        for(var i in ClassList){
+            // 渲染大分类列表
+            var list = '<div class="col '+cols+'" id="catalogue'+i+'" data-catogroy="'+i+'">\
+                                <figure>\
+                                    <img src="src/imgs/list'+i+'.jpg" alt="'+ClassList[i]+'" title="'+ClassList[i]+'">\
+                                    <figcaption class="col'+i+'" style="background:url(src/imgs/list'+i+'.png)">\
+                                        <h3>'+ClassList[i]+'</h3>\
+                                        <table class="m_table" id="cata" cellpadding="0" cellspacing="0">\
                                             <tbody></tbody>\
                                         </table>\
-			                        </figcaption>\
-			                    </figure>\
-			                </div>';
-			$SongClass.append(list);	
+                                    </figcaption>\
+                                </figure>\
+                            </div>';
+            $SongClass.append(list);    
             musicList(parseInt(i));
-		}
+        }
         function musicList(listIndex){
             var musicList = Data[1][listIndex];
+            console.log(Data[1])
             for(var j in musicList){
                 var munber = parseInt(j)+1;
-                var item = '<tr data-id="'+musicList[j].Id+'" data-src="'+musicList[j].Src+'" data-img="'+musicList[j].Img+'">\
+                var item = '<tr data-id="'+musicList[j].id+'" data-src="'+musicList[j].src+'" data-img="'+musicList[j].img+'">\
                                 <td class="m_list_num"><span >'+munber+'</span></td>\
-                                <td class="music_name">'+musicList[j].Name+'</td>\
-                                <td class="music_singer">'+musicList[j].Singer+'</td>\
+                                <td class="music_name">'+musicList[j].title+'</td>\
+                                <td class="music_singer">'+musicList[j].singer+'</td>\
                                 <td class="more iconfont clrfix">\
                                     &#xebbb;\
                                     <div class="more_box">\
@@ -193,7 +212,7 @@ player = {
                 $('#catalogue'+listIndex).find('tbody').append(item);
             }
         }
-	},
+    },
     recomMusicBox:function(){//歌单渲染
         var recomMusicDate = recomment(),//接受推荐歌单数据，0是歌单名，1是歌单介绍，2是歌单音乐文件
             Audio      = document.getElementById('Audio'),//获取音乐播放器
@@ -228,7 +247,7 @@ player = {
                                 </div>\
                             </a>\
                             <div class="music_desc">\
-                                <h4>'+musicList[i]+'</h4>\
+                                <h4>'+musicList[i].name+'</h4>\
                             </div>\
                         </div>';
             $recomBox.append(list);    
@@ -238,10 +257,10 @@ player = {
             var musicList =recomMusicDate[2][listIndex];
             for(var j in musicList){
                 var munber = parseInt(j)+1;
-                var item =  '<tr data-id="'+musicList[j].Id+'" data-src="'+musicList[j].Src+'" data-img="'+musicList[j].Img+'">\
+                var item =  '<tr data-id="'+musicList[j].id+'" data-src="'+musicList[j].src+'" data-img="'+musicList[j].img+'">\
                                 <td class="m_list_num"><span >'+munber+'</span></td>\
-                                <td class="music_name"><div>'+musicList[j].Name+'</div></td>\
-                                <td class="music_singer"><div>'+musicList[j].Singer+'</div></td>\
+                                <td class="music_name"><div>'+musicList[j].title+'</div></td>\
+                                <td class="music_singer"><div>'+musicList[j].singer+'</div></td>\
                                 <td class="plays iconfont">&#xe619;</td>\
                                 <td class="adds iconfont">&#xe61c;</td>\
                                 <td class="collects"><div class="heart"></td>\
@@ -273,15 +292,15 @@ player = {
             }
         })
     },
-	login:function(){//登陆显示、注册切换
-		$('#js-login').on("click",function(){
-			$('.modal-backdropss').show();
-			$('#signin').show();
-		});
-		$('.modal-backdropss').on('click',function() {
-			$('#signin').hide();
-			$(this).hide();
-		});
+    login:function(){//登陆显示、注册切换
+        $('#js-login').on("click",function(){
+            $('.modal-backdropss').show();
+            $('#signin').show();
+        });
+        $('.modal-backdropss').on('click',function() {
+            $('#signin').hide();
+            $(this).hide();
+        });
         $('#signin-btn').on('click',function(){//登陆ajax请求
             $.ajax({
                 url:'server.php/login',
@@ -342,6 +361,9 @@ player = {
                     if(data.code == 200){
                         defaults.isLogin = 0;
                         window.location.reload();
+                        if(localStorage.musicList != ''){
+                            localStorage.musicList = '';
+                        }
                     }else{
                         console.log('error');
                         defaults.isLogin = 1;
@@ -349,7 +371,7 @@ player = {
                 }
             })
         });
-	},
+    },
     fromValidate:function(){//表单验证
         function errorType(_name){//正则判断返回结果
             if( _name == ""){ 
@@ -399,13 +421,13 @@ player = {
         });
 
     },
-	closeLogin:function(){
-		$('.rl-close').on('click',function(){
-			$('.modal-backdrop').trigger('click');
-		})
-	},
-	bannerPlay:function(){// 首页轮播图-渐变
-		var banner = $('.turning_box'),
+    closeLogin:function(){
+        $('.rl-close').on('click',function(){
+            $('.modal-backdrop').trigger('click');
+        })
+    },
+    bannerPlay:function(){// 首页轮播图-渐变
+        var banner = $('.turning_box'),
             slides = banner.find('.banner-slide'),
             dotContainer = banner.find('.banner-dots'),
             dotTpl = '',
@@ -477,16 +499,16 @@ player = {
         next();
         autoPlay();
     
-	},
-	voiceShow:function(){// 音量调节显示
-		var self = this,
+    },
+    voiceShow:function(){// 音量调节显示
+        var self = this,
         $vol = $('.play-banner').find("#vol");
-		$vol.on("click",function(){
-			$('.play-banner').find('.m-vol').toggle();
-		});
+        $vol.on("click",function(){
+            $('.play-banner').find('.m-vol').toggle();
+        });
         self.volumeSlider();
-	},
-	floatLabel:function (inputType) {//登录注册输入框，提示上浮
+    },
+    floatLabel:function (inputType) {//登录注册输入框，提示上浮
         $(inputType).each(function () {
             var $this = $(this);
             $this.focus(function () {
@@ -502,13 +524,14 @@ player = {
     navSwitch:function (){//导航切换
         var self = this,
             Audio = document.getElementById('Audio');//获取音乐播放器
-    	$('.header-wrap li').find('a').on('click',function() {
-    		var order = $(this).attr('data-icon');
-			$(this).parents('li').addClass('active').siblings().removeClass('active');
+        self.closeRecommendMusicList();
+        $('.header-wrap li').find('a').on('click',function() {
+            var order = $(this).attr('data-icon');
+            $(this).parents('li').addClass('active').siblings().removeClass('active');
             
             if(order == 2){//显示为播放列表时
-                if(!localStorage.musicList){
-                    $('.my_music').find('.u_title').hide();
+                if(!localStorage.musicList || localStorage.musicList == ''){
+                    // $('.my_music').find('.u_title').hide();
                     $('.my_music').find('.u_title_list').hide();
                     $('.my_music').find('.no-login').show();
                 }else{
@@ -517,30 +540,58 @@ player = {
                     var musicLists = JSON.parse(localStorage.musicList),
                         currentId = $(Audio).attr('data-id');
 
-                    for(var i in musicLists){
-                        var num = parseInt(i)+1;
-                        if(parseInt(musicLists[i].musicId) === parseInt(currentId)){
-                            var current = 'class="active"';
-                        }else{
-                            var current = '';
+                    if(musicLists.length > 11){
+                        $('.my_music').find('.list-nxt').show();
+                        for(var i = 0;i < 11; i++){
+                            var num = parseInt(i)+1;
+                            if(parseInt(musicLists[i].musicId) === parseInt(currentId)){
+                                var current = 'class="active"';
+                            }else{
+                                var current = '';
+                            }
+                            var list = '<tr '+current+' data-id="'+musicLists[i].musicId+'" data-src="'+musicLists[i].musicSrc+'" data-img="'+musicLists[i].musicImg+'">\
+                                            <td class="m_list_num"><span>'+num+'</span></td>\
+                                            <td class="music_name"><div>'+musicLists[i].musicName+'</div></td>\
+                                            <td class="music_singer"><div>'+musicLists[i].musicSinger+'</div></td>\
+                                            <td class="plays"><div class="play"></div></td>\
+                                            <td class="collects"><div class="heart"></div></td>\
+                                            <td class="dels"><div class="del">-</div></td>\
+                                        </tr>';
+                            $('.my_music .u_title_list').find('tbody').attr('page-id','1');
+                            $('.my_music .u_title_list').find('tbody').append(list);
                         }
-                        var list = '<tr '+current+' data-id="'+musicLists[i].musicId+'" data-src="'+musicLists[i].musicSrc+'" data-img="'+musicLists[i].musicImg+'">\
-                                        <td class="m_list_num"><span>'+num+'</span></td>\
-                                        <td class="music_name"><div>'+musicLists[i].musicName+'</div></td>\
-                                        <td class="music_singer"><div>'+musicLists[i].musicSinger+'</div></td>\
-                                        <td class="plays"><div class="play"></div></td>\
-                                        <td class="collects"><div class="heart"></div></td>\
-                                        <td class="dels"><div class="del">-</div></td>\
-                                    </tr>';
-                        $('.my_music .u_title_list').find('tbody').append(list);
+                        self.listChangeBG('.u_title_list tr');
+                        $('.my_music .u_title').find('#flag_trackCount').html(musicLists.length);
+                        $('.my_music').find('.u_title').show();
+                        $('.my_music').find('.u_title_list').show();
+                    }else{
+                        for(var i = 0;i<musicLists.length; i++){
+                            var num = parseInt(i)+1;
+                            if(parseInt(musicLists[i].musicId) === parseInt(currentId)){
+                                var current = 'class="active"';
+                            }else{
+                                var current = '';
+                            }
+                            var list = '<tr '+current+' data-id="'+musicLists[i].musicId+'" data-src="'+musicLists[i].musicSrc+'" data-img="'+musicLists[i].musicImg+'">\
+                                            <td class="m_list_num"><span>'+num+'</span></td>\
+                                            <td class="music_name"><div>'+musicLists[i].musicName+'</div></td>\
+                                            <td class="music_singer"><div>'+musicLists[i].musicSinger+'</div></td>\
+                                            <td class="plays"><div class="play"></div></td>\
+                                            <td class="collects"><div class="heart"></div></td>\
+                                            <td class="dels"><div class="del">-</div></td>\
+                                        </tr>';
+                            $('.my_music .u_title_list').find('tbody').attr('page-id','1');
+                            $('.my_music .u_title_list').find('tbody').append(list);
+                        }
+                        self.listChangeBG('.u_title_list tr');
+                        $('.my_music .u_title').find('#flag_trackCount').html(musicLists.length);
+                        $('.my_music').find('.u_title').show();
+                        $('.my_music').find('.u_title_list').show();
                     }
-                    self.listChangeBG('.u_title_list tr');
-                    $('.my_music .u_title').find('#flag_trackCount').html(musicLists.length);
-                    $('.my_music').find('.u_title').show();
-                    $('.my_music').find('.u_title_list').show();
+                    
                     
                 }
-                self.playMusic("#playList .play");
+                self.playMusic("#playList",".play");
                 
             }
             if(order == 3){//显示为我的收藏时
@@ -548,73 +599,217 @@ player = {
                     $('#js-login').trigger('click');
                 }else{
                     $('.main-box').removeClass('control0 control1 control2 control3').addClass('control'+order);
-                    ////ajax请求收藏列表
-                    //     $.ajax({
-                    //         url:'server.php/collect_list',
-                    //         type:'post',
-                    //         data:{
-                    //             userid : defaults.userid;
-                    //         },
-                    //         dataType:'json',
-                    //         success:function(data){
-                    //             if(data.code == 200){
-                    //                 var datas = data.data;
-                    //                 if(datas == 0){
-                    //                     $('.my_collect').find('.u_title').hide();
-                    //                     $('.my_collect').find('.u_title_list').hide();
-                    //                     $('.my_collect').find('.no-login').show();
-                    //                 }else{
-                    //                     $('.my_collect').find('.no-login').hide();
-                    //                     $('.my_collect').find('.u_title').show();
-                    //                     for(var i in datas){
-                    //                         var num = parseInt(i)+1;
-                    //                         var list = '<tr data-id="'+datas[j].id+'" data-src="'+datas[j].src+'" data-img="'+datas[j].img+'">\
-                    //                                         <td class="m_list_num"><span>'+num+'</span></td>\
-                    //                                         <td class="music_name"><div>'+datas[i].title+'</div></td>\
-                    //                                         <td class="music_singer"><div>'+datas[i].singer+'</div></td>\
-                    //                                         <td class="plays"><div class="play"></div></td>\
-                    //                                         <td class="collects"><div class="collect"></div></td>\
-                    //                                         <td class="dels"><div class="del">-</div></td>\
-                    //                                     </tr>';
-                    //                     }
-                    //                     $('.my_collect .u_title_list').find('.tbody').append(list);
-                    //                 }
-                    //             }else{
-                    //                 console.log('加载收藏列表失败');
-                    //             }
-                    //         }
-                    //     });
+                    var userid = defaults.userid;
+                    $('.my_collect .u_title_list').find('tbody').html('');
+                    //ajax请求收藏列表
+                    $.ajax({
+                        url:'server.php/collect',
+                        type:'get',
+                        dataType:'json',
+                        success:function(data){
+                            var datas = data;
+                            localStorage.collectList = JSON.stringify(datas);
+                            if(datas.length == 0){
+                                // $('.my_collect').find('.u_title').hide();
+                                $('.my_collect').find('.u_title_list').hide();
+                                $('.my_collect').find('.no-login').show();
+                            }else {
+                                $('.my_collect').find('#flag_trackCount').text(datas.length);
+                                $('.my_collect').find('.no-login').hide();
+                                $('.my_collect').find('.u_title').show();
+                                if(datas.length > 11){
+                                    $('.my_collect').find('.list-nxt').show();
+                                    for(var i = 0 ;i < 11 ; i++){
+                                        var num = parseInt(i)+1;
+                                        var list = '<tr data-id="'+datas[i].id+'" data-src="'+datas[i].src+'" data-img="'+datas[i].img+'">\
+                                                        <td class="m_list_num"><span>'+num+'</span></td>\
+                                                        <td class="music_name"><div>'+datas[i].title+'</div></td>\
+                                                        <td class="music_singer"><div>'+datas[i].singer+'</div></td>\
+                                                        <td class="plays"><div class="play"></div></td>\
+                                                        <td class="adds"><div class="add"></div></td>\
+                                                        <td class="dels"><div class="del">-</div></td>\
+                                                    </tr>';
+                                        $('.my_collect .u_title_list').find('tbody').append(list);
+                                        $('.my_collect .u_title_list').find('tbody').attr('page-id','1');
+                                    }
+                                    self.listChangeBG('.u_title_list tr');
+                                }else{
+                                    for(var i = 0;i<datas.length; i++){
+                                        var num = parseInt(i)+1;
+                                        var list = '<tr data-id="'+datas[i].id+'" data-src="'+datas[i].src+'" data-img="'+datas[i].img+'">\
+                                                        <td class="m_list_num"><span>'+num+'</span></td>\
+                                                        <td class="music_name"><div>'+datas[i].title+'</div></td>\
+                                                        <td class="music_singer"><div>'+datas[i].singer+'</div></td>\
+                                                        <td class="plays"><div class="play"></div></td>\
+                                                        <td class="collects"><div class="collect"></div></td>\
+                                                        <td class="dels"><div class="del">-</div></td>\
+                                                    </tr>';
+                                        $('.my_collect .u_title_list').find('tbody').append(list);
+                                        $('.my_collect .u_title_list').find('tbody').attr('page-id','1');
+                                    }
+                                    self.listChangeBG('.u_title_list tr');
+                                }
+                                self.playMusic("#my_collect",".play");
+                                self.adds(".adds");
+                                self.collectDel(".dels");
+                            }
+                        },
+                        error:function(data){
+                            console.log(data);
+                        }
+                    });
                 }
             }else{
                 $('.main-box').removeClass('control0 control1 control2 control3').addClass('control'+order);
             }
-    	});
+        });
+    },
+    pageNxt:function(type,typeList){//下一页
+        var Audio = document.getElementById('Audio');//播放器
+        var self = this;
+        $(type).on('click','.list-nxt',function(){
+            var page = $('.my_music .u_title_list').find('tbody').attr('page-id');
+            var musicLists = JSON.parse(localStorage[typeList]),
+                currentId = $(Audio).attr('data-id');
+                $(type).find('tbody').html('');
+            function temp(pages,pagenum){
+                for(var i = pagenum ;i < Leg ; i++){
+                    var num = parseInt(i)+1;
+                    if(typeList == 'musicList'){
+                        if(parseInt(musicLists[i].musicId) === parseInt(currentId)){
+                            var current = 'class="active"';
+                        }else{
+                            var current = '';
+                        }
+                    }
+                    
+                    var list = '<tr '+current+' data-id="'+musicLists[i].musicId+'" data-src="'+musicLists[i].musicSrc+'" data-img="'+musicLists[i].musicImg+'">\
+                                    <td class="m_list_num"><span>'+num+'</span></td>\
+                                    <td class="music_name"><div>'+musicLists[i].musicName+'</div></td>\
+                                    <td class="music_singer"><div>'+musicLists[i].musicSinger+'</div></td>\
+                                    <td class="plays"><div class="play"></div></td>\
+                                    <td class="collects"><div class="heart"></div></td>\
+                                    <td class="dels"><div class="del">-</div></td>\
+                                </tr>';
+                    $('.my_music .u_title_list').find('tbody').attr('page-id',pages);
+                    $('.my_music .u_title_list').find('tbody').append(list);
+                }
+                self.listChangeBG('.u_title_list tr');
+                // $('.my_music .u_title').find('#flag_trackCount').html(musicLists.length);
+                $(type).find('.u_title').show();
+                $(type).find('.u_title_list').show();
+            }
+            if(page == 1 && musicLists.length > 22){
+                var Leg = 22;
+            }else if(page == 2 && musicLists.length > 33){
+                var Leg = 33;
+            }else if(page == 3){
+                var Leg = musicLists.length;
+            }else{
+                var Leg = musicLists.length;
+            }
+            if(page == 1){
+                temp(2,11);
+                $(type).find('.list-pre').attr('page-id',1).show();
+                if(Leg < 22){
+                    $(type).find('.list-nxt').hide();
+                }
+            }else if(page == 2){
+                temp(3,22);
+                $(type).find('.list-pre').attr('page-id',2).show();
+                if(Leg < 33){
+                    $(type).find('.list-nxt').hide();
+                }
+            }else if(page == 3){
+                temp(4,33);
+                $(type).find('.list-pre').attr('page-id',3).show();
+                $(type).find('.list-nxt').hide();
+            }else{
+                $(type).find('.list-nxt').hide();
+            }
+            self.playMusic("#playList",".play");
+        });
+    },
+    pagePre:function(type,typeList){//上一页
+        var Audio = document.getElementById('Audio');//播放器
+        var self = this;
+        $(type).on('click','.list-pre',function(){
+            var page = $('.my_music .u_title_list').find('tbody').attr('page-id');
+            var musicLists = JSON.parse(localStorage[typeList]),
+                currentId = $(Audio).attr('data-id');
+                $(type).find('tbody').html('');
+            function temp(pages,pagenum,Leg){
+                for(var i = pagenum ;i < Leg ; i++){
+                    var num = parseInt(i)+1;
+                    if(typeList == 'musicList'){
+                        if(parseInt(musicLists[i].musicId) === parseInt(currentId)){
+                            var current = 'class="active"';
+                        }else{
+                            var current = '';
+                        }
+                    }
+                    
+                    var list = '<tr '+current+' data-id="'+musicLists[i].musicId+'" data-src="'+musicLists[i].musicSrc+'" data-img="'+musicLists[i].musicImg+'">\
+                                    <td class="m_list_num"><span>'+num+'</span></td>\
+                                    <td class="music_name"><div>'+musicLists[i].musicName+'</div></td>\
+                                    <td class="music_singer"><div>'+musicLists[i].musicSinger+'</div></td>\
+                                    <td class="plays"><div class="play"></div></td>\
+                                    <td class="collects"><div class="heart"></div></td>\
+                                    <td class="dels"><div class="del">-</div></td>\
+                                </tr>';
+                    $(type).find('tbody').attr('page-id',pages);
+                    $(type).find('tbody').append(list);
+                }
+                self.listChangeBG('.u_title_list tr');
+                // $('.my_music .u_title').find('#flag_trackCount').html(musicLists.length);
+                $(type).find('.u_title').show();
+                $(type).find('.u_title_list').show();
+            }
+            if(page == 2){
+                temp(1,0,11);
+                $(type).find('.list-nxt').attr('page-id',2).show();
+                $(type).find('.list-pre').hide();
+            }else if(page == 3){
+                temp(2,11,22);
+                $(type).find('.list-nxt').attr('page-id',3).show();
+            }else if(page == 4){
+                temp(3,22,33);
+                $(type).find('.list-nxt').attr('page-id',4).show();
+            }else{
+                $(type).find('.list-pre').hide();
+            }
+            self.playMusic("#playList",".play");
+        });
     },
     loginChange:function(){//登录、注册切换
-    	$('.change_link').on('click', 'a', function() {
-    		if($(this).hasClass('log')){
-    			$('#login').show();
-    	    	$('#register').hide();
+        $('.change_link').on('click', 'a', function() {
+            if($(this).hasClass('log')){
+                $('#login').show();
+                $('#register').hide();
 
-    		}else{
-	    		$('#login').hide();
-	    	    $('#register').show();
-    		}
-    	});
+            }else{
+                $('#login').hide();
+                $('#register').show();
+            }
+        });
     },
     listChangeBG:function(list){//隔行变色
-    	var list = $(list);
-    	for(var i = 0 ; i < list.length ; i++){
-    		if( i % 2 != 0)
-    			$(list[i]).css('background','#f7f7f7');
-    	}
+        var list = $(list);
+        for(var i = 0 ; i < list.length ; i++){
+            if( i % 2 != 0)
+                $(list[i]).css('background','#f7f7f7');
+        }
     },
     recomendMusicList:function(){//音乐推荐弹出详细列表
+        var self = this;
         $('.music_item').on('click','a',function(){
             $('.index .modal-backdrop').show();
             $(this).find('.img').addClass('musical_desc');
             $(this).find('.info').addClass('musical_list');
             $('.index .modal-backdrop').append('<div class="close iconfont">&#xe635;</div>');
+            self.playMusic('#home','.plays');
+            self.adds('.adds');
+            self.collect('.heart');
         });
     },
     closeRecommendMusicList:function(){//关闭音乐推荐列表
@@ -637,11 +832,21 @@ player = {
 
         $(Audio).attr({'src':src,'data-id':id});
         Audio.load();//加载歌曲
-        
-
+        var preList = {
+            'id':id,
+            'name':name,
+            'singer':singer,
+            'src':src,
+            'img':img
+        };
+        pre.push(preList);
+        if(pre.length > 2){
+            pre.splice(0,1);
+        }
+        console.log(pre);
         //渲染播放面板详细信息
         self.showMusicDetail(id,name,singer,img,src);
-
+        
         Audio.addEventListener("canplay", function() {//歌曲加载完毕
             if(localStorage.musicList){
                 music_list = JSON.parse(localStorage.musicList);
@@ -652,7 +857,8 @@ player = {
                     if(parseInt(musicalList[j]) === parseInt(musicDesc.musicId)){
                         m = 1;
                         $('#playList').find('tr').removeClass('active');
-                        $('#playList').find('tr').eq(j).addClass('active');
+                        var s = parseInt(j%11);//为了实现分页取与看当前歌曲在当前页中的位置
+                        $('#playList').find('tr').eq(s).addClass('active');
                     }
                 }
                 if(m == 0){
@@ -679,7 +885,7 @@ player = {
                     console.log('ChangeMode2 里的parseInt(currentId)',parseInt(currentIds));
                     $('#playList').find('tr').removeClass('active');
                     $('#playList').find('tr').eq(j).addClass('active');
-                    self.mode();
+
                     if(localStorage.mode == 'loop'){
                         $(Audio).attr('loop','loop');
                     }else if(localStorage.mode == 'random'){
@@ -751,16 +957,16 @@ player = {
             
             $(Audio).attr({'src':defaults.src,'data-id':defaults.id});
             Audio.load();//加载歌曲
-
+            
             
             //渲染播放面板详细信息
             self.showMusicDetail(defaults.id,defaults.name,defaults.singer,defaults.img,defaults.src);
         }, false)
 
     },
-    playMusic:function(play){//播放分类歌曲
+    playMusic:function(item,play){//播放分类歌曲
         var self = this;
-        $(play).on('click', function() {
+        $('tbody').delegate(play,'click', function() {
             var $parents = $(this).parents('tr'),//获取点击的父节点
                 Audio = document.getElementById('Audio'),//获取音乐播放器
                 $plyBanner = $('.play-banner');
@@ -785,50 +991,6 @@ player = {
                 m = 0;
             self.play(musicId,musicName,musicSinger,musicSrc,musicImg,music_list,musicalList,musicDesc,i,j,m);
         });
-    },
-    nextPlay:function(){
-        // $('.play-banner').on('click',function(){
-        //     var index = 0,
-        //         music_lists = [],
-        //         musicalLists = new Array();
-        //     var currentIds = $(Audio).attr('data-id');
-        //         music_lists = JSON.parse(localStorage.musicList);
-        //     for(var i in music_lists){
-        //         musicalLists.push(music_lists[i].musicId);
-        //     }
-        //     if
-        //     for(var j in musicalLists){//查看播放列表中是否已经存在当前播放歌曲
-        //         if(parseInt(musicalLists[j]) === parseInt(currentIds)){
-        //             $('#playList').find('tr').removeClass('active');
-        //             $('#playList').find('tr').eq(j).addClass('active');
-        //             self.mode();
-        //             if(localStorage.mode == 'loop'){
-        //                 $(Audio).attr('loop','loop');
-        //             }else if(localStorage.mode == 'random'){
-        //                 Audio.loop = '';
-        //                 index = Math.floor(Math.random()*musicalLists.length);
-        //                 console.log('ChangeMode 里的index',index);
-        //                 defaults.id = music_lists[index].musicId,
-        //                 defaults.name = music_lists[index].musicName,
-        //                 defaults.singer = music_lists[index].musicSinger,
-        //                 defaults.src = music_lists[index].musicSrc,
-        //                 defaults.img = music_lists[index].musicImg;
-        //             }else{
-        //                 Audio.loop ='';
-        //                 index = parseInt(j)+1;
-        //                 if(index == musicalLists.length){
-        //                     index = 0;
-        //                 }
-        //                 console.log("循环播放index:",index);
-        //                 defaults.id = music_lists[index].musicId,
-        //                 defaults.name = music_lists[index].musicName,
-        //                 defaults.singer = music_lists[index].musicSinger,
-        //                 defaults.src = music_lists[index].musicSrc,
-        //                 defaults.img = music_lists[index].musicImg;
-        //             }
-        //         }
-        //     }
-        // });
     },
     timeConversion:function(time,showDom){//转换每首歌曲时长格式并显示
         var $timePlace = $('.play-banner .time').find(showDom);
@@ -919,6 +1081,7 @@ player = {
         }).on('mouseup',function(){
             status = false;
             Audio.play();
+            $('.play-banner').find('.play').addClass('pause');
         })
         $('.progress-bar').on('click',function(e){
             if(!status){
@@ -989,32 +1152,31 @@ player = {
     },
     collect:function(heart){// 收藏
         var $heart = $(heart);
-        $heart.on('click',function(){
+        $('tbody').delegate(heart,'click',function(){
             if(defaults.isLogin == 0){
                 $('#js-login').trigger('click');
             }else{
                 //ajax
-                var musicId = $(this).parent('tr').attr('data-id');
-                // $.ajax({
-                //     url:'server.php/collect',
-                //     type:'post',
-                //     data:{
-                //         musicId : musicId,
-                //         userid : defaults.userid
-                //     },
-                //     dataType:'json',
-                //     success:function(data){
-                //         if(data.code == 200){
-                //             if($(this).hasClass('heartAnimation')){
-                //                 $(this).addClass('heartOver').removeClass('heartAnimation');
-                //             }else{
-                //                 $(this).addClass('heartAnimation').removeClass('heartOver');
-                //             }
-                //         }else{
-                //             console.log('添加到收藏列表失败');
-                //         }
-                //     }
-                // });
+                var musicId = $(this).parents('tr').attr('data-id');
+                console.log(musicId);
+                $.ajax({
+                    url:'server.php/collect',
+                    type:'post',
+                    data:{
+                        id : musicId,
+                    },
+                    dataType:'json',
+                    success:function(data){
+                        if($(this).hasClass('heartAnimation')){
+                            $(this).addClass('heartOver').removeClass('heartAnimation');
+                        }else{
+                            $(this).addClass('heartAnimation').removeClass('heartOver');
+                        }
+                    },
+                    error:function(data){
+                            console.log('添加到收藏列表失败');
+                    }
+                });
                 
             }
         });
@@ -1105,6 +1267,40 @@ player = {
             }
         })
     },
+    bannerCollect:function(){//播放面板收藏
+        var Audio = document.getElementById('Audio');//音乐播放器
+        $('.vol-box').on('click','.heart',function(){
+            var musicId = $(Audio).attr('data-id');
+            if(typeof musicId != 'undefined'){
+                if(defaults.isLogin == 0){
+                    $('#js-login').trigger('click');
+                }else{
+                    //ajax
+                    console.log(musicId);
+                    $.ajax({
+                        url:'server.php/collect',
+                        type:'post',
+                        data:{
+                            id : musicId,
+                        },
+                        dataType:'json',
+                        success:function(data){
+                            if($(this).hasClass('heartAnimation')){
+                                $(this).addClass('heartOver').removeClass('heartAnimation');
+                            }else{
+                                $(this).addClass('heartAnimation').removeClass('heartOver');
+                            }
+                        },
+                        error:function(data){
+                                console.log('添加到收藏列表失败');
+                        }
+                    });
+                    
+                }
+            }
+            
+        });
+    },
     musicListDel:function(parents,child){//删除
         var $parents = $(parents);
         $parents.delegate(child,'click',function(){
@@ -1124,41 +1320,88 @@ player = {
         var $dels = $(del);
         $dels.on('click',function(){
             //ajax
-            var musicId = $(this).parent('tr').attr('data-id');
-            // $.ajax({
-            //     url:'server.php/del',
-            //     type:'post',
-            //     data:{
-            //         musicId : musicId,
-            //         userid : defaults.userid
-            //     },
-            //     dataType:'json',
-            //     success:function(data){
-            //         if(data.code == 200){
-            //             $(this).parent('tr').animate({'height':0},200);
-            //         }else{
-            //             console.log('删除失败');
-            //         }
-            //     }
-            // });
+            var musicId = $(this).parents('tr').attr('data-id');
+            $.ajax({
+                url:'server.php/collect',
+                type:'DELETE',
+                data:{
+                    id : musicId,
+                },
+                dataType:'json',
+                success:function(data){
+                    $('.header-wrap li').find('a').eq(3).trigger('click');//重新渲染播放列表 
+                },
+                error:function(data){
+                    console.log('删除失败');
+                }
+            });
         });
+    },
+    prePlay:function(){//上一曲
+        var Audio = document.getElementById('Audio');//音乐播放器
+        var self = this;
+        $('.pre').on('click',function(){
+            if(pre.length == 2){
+                var currId = $(Audio).attr('data-id');
+                if(typeof currId != 'undefined' && pre[0].id != currId ){
+                    var music_list = JSON.parse(localStorage.musicList),
+                        musicalList = new Array(),
+                        musicDesc = {
+                            'musicId' : pre[0].id,
+                            'musicName' : pre[0].name,
+                            'musicSinger' : pre[0].singer,
+                            'musicSrc' : pre[0].src,
+                            'musicImg' : pre[0].img
+                        }
+                        i = 0,
+                        j = 0,
+                        m = 0;
+                
+                    self.play(pre[0].id,pre[0].name,pre[0].singer,pre[0].src,pre[0].img,music_list,musicalList,musicDesc,i,j,m)
+                }
+            }
+            
+        })
+        
+    },
+    nextPlay:function(){//下一曲
+        var Audio = document.getElementById('Audio');//音乐播放器
+        var self = this;
+        $('.nxt').on('click',function(){
+            if(defaults.id != ''){
+                var music_list = JSON.parse(localStorage.musicList),
+                    musicalList = new Array(),
+                    musicDesc = {
+                        'musicId' : defaults.id,
+                        'musicName' : defaults.name,
+                        'musicSinger' : defaults.singer,
+                        'musicSrc' : defaults.src,
+                        'musicImg' : defaults.img
+                    }
+                    i = 0,
+                    j = 0,
+                    m = 0;
+            
+                self.play(defaults.id,defaults.name,defaults.singer,defaults.src,defaults.img,music_list,musicalList,musicDesc,i,j,m);
+            }
+        })    
     }
 
 }
 
 
 $(function () {
-	player.init();
+    player.init();
 });
 
 // (function($){
-// 	// Settings
-// 	var repeat = localStorage.repeat || 0,//通过localstorage来 ，控制重复 （1为循环重复播放，0为不循环播放）
-// 		shuffle = localStorage.shuffle || 'false',//通过localStorage 来，控制播放是否为随机 （true为随机，false为顺序）
-// 		continous = true,
-// 		autoplay = true,
-// 		playlist = [
-// 		{
+//  // Settings
+//  var repeat = localStorage.repeat || 0,//通过localstorage来 ，控制重复 （1为循环重复播放，0为不循环播放）
+//      shuffle = localStorage.shuffle || 'false',//通过localStorage 来，控制播放是否为随机 （true为随机，false为顺序）
+//      continous = true,
+//      autoplay = true,
+//      playlist = [
+//      {
 // title: '德国第一装甲师进行曲',
 // artist: '德国',
 // album: '德国第一装甲师进行曲.mp3',
@@ -1183,209 +1426,221 @@ $(function () {
 // ogg: ''
 // },];
 
-// 	// Load playlist
-// 	for (var i=0; i<playlist.length; i++){
-// 		var item = playlist[i];
-// 		$('#playlist').append('<li>'+item.artist+' - '+item.title+'</li>');
-// 	}
+//  // Load playlist
+//  for (var i=0; i<playlist.length; i++){
+//      var item = playlist[i];
+//      $('#playlist').append('<li>'+item.artist+' - '+item.title+'</li>');
+//  }
 
-// 	var time = new Date(),
-// 		currentTrack = shuffle === 'true' ? time.getTime() % playlist.length : 0,
-// 		trigger = false,
-// 		audio, timeout, isPlaying, playCounts;
+//  var time = new Date(),
+//      currentTrack = shuffle === 'true' ? time.getTime() % playlist.length : 0,
+//      trigger = false,
+//      audio, timeout, isPlaying, playCounts;
 
-// 	var play = function(){
-// 		audio.play();
-// 		$('.playback').addClass('playing');
-// 		timeout = setInterval(updateProgress, 500);
-// 		isPlaying = true;
-// 	}
+//  var play = function(){
+//      audio.play();
+//      $('.playback').addClass('playing');
+//      timeout = setInterval(updateProgress, 500);
+//      isPlaying = true;
+//  }
 
-// 	var pause = function(){
-// 		audio.pause();
-// 		$('.playback').removeClass('playing');
-// 		clearInterval(updateProgress);
-// 		isPlaying = false;
-// 	}
+//  var pause = function(){
+//      audio.pause();
+//      $('.playback').removeClass('playing');
+//      clearInterval(updateProgress);
+//      isPlaying = false;
+//  }
 
-// 	// Update progress
-// 	var setProgress = function(value){
-// 		var currentSec = parseInt(value%60) < 10 ? '0' + parseInt(value%60) : parseInt(value%60),
-// 			ratio = value / audio.duration * 100;
+//  // Update progress
+//  var setProgress = function(value){
+//      var currentSec = parseInt(value%60) < 10 ? '0' + parseInt(value%60) : parseInt(value%60),
+//          ratio = value / audio.duration * 100;
 
-// 		$('.timer').html(parseInt(value/60)+':'+currentSec);
-// 		$('.progress .pace').css('width', ratio + '%');
-// 		$('.progress .slider a').css('left', ratio + '%');
-// 	}
+//      $('.timer').html(parseInt(value/60)+':'+currentSec);
+//      $('.progress .pace').css('width', ratio + '%');
+//      $('.progress .slider a').css('left', ratio + '%');
+//  }
 
-// 	var updateProgress = function(){
-// 		setProgress(audio.currentTime);
-// 	}
+//  var updateProgress = function(){
+//      setProgress(audio.currentTime);
+//  }
 
-// 	// Progress slider
-// 	$('.progress .slider').slider({step: 0.1, slide: function(event, ui){
-// 		$(this).addClass('enable');
-// 		setProgress(audio.duration * ui.value / 100);
-// 		clearInterval(timeout);
-// 	}, stop: function(event, ui){
-// 		audio.currentTime = audio.duration * ui.value / 100;
-// 		$(this).removeClass('enable');
-// 		timeout = setInterval(updateProgress, 500);
-// 	}});
+//  // Progress slider
+//  $('.progress .slider').slider({step: 0.1, slide: function(event, ui){
+//      $(this).addClass('enable');
+//      setProgress(audio.duration * ui.value / 100);
+//      clearInterval(timeout);
+//  }, stop: function(event, ui){
+//      audio.currentTime = audio.duration * ui.value / 100;
+//      $(this).removeClass('enable');
+//      timeout = setInterval(updateProgress, 500);
+//  }});
 
-// 	// Volume slider
-// 	var setVolume = function(value){
-// 		audio.volume = localStorage.volume = value;
-// 		$('.volume .pace').css('width', value * 100 + '%');
-// 		$('.volume .slider a').css('left', value * 100 + '%');
-// 	}
+//  // Volume slider
+//  var setVolume = function(value){
+//      audio.volume = localStorage.volume = value;
+//      $('.volume .pace').css('width', value * 100 + '%');
+//      $('.volume .slider a').css('left', value * 100 + '%');
+//  }
 
-// 	var volume = localStorage.volume || 0.5;
-// 	$('.volume .slider').slider({max: 1, min: 0, step: 0.01, value: volume, slide: function(event, ui){
-// 		setVolume(ui.value);
-// 		$(this).addClass('enable');
-// 		$('.mute').removeClass('enable');
-// 	}, stop: function(){
-// 		$(this).removeClass('enable');
-// 	}}).children('.pace').css('width', volume * 100 + '%');
+//  var volume = localStorage.volume || 0.5;
+//  $('.volume .slider').slider({max: 1, min: 0, step: 0.01, value: volume, slide: function(event, ui){
+//      setVolume(ui.value);
+//      $(this).addClass('enable');
+//      $('.mute').removeClass('enable');
+//  }, stop: function(){
+//      $(this).removeClass('enable');
+//  }}).children('.pace').css('width', volume * 100 + '%');
 
-// 	$('.mute').click(function(){
-// 		if ($(this).hasClass('enable')){
-// 			setVolume($(this).data('volume'));
-// 			$(this).removeClass('enable');
-// 		} else {
-// 			$(this).data('volume', audio.volume).addClass('enable');
-// 			setVolume(0);
-// 		}
-// 	});
+//  $('.mute').click(function(){
+//      if ($(this).hasClass('enable')){
+//          setVolume($(this).data('volume'));
+//          $(this).removeClass('enable');
+//      } else {
+//          $(this).data('volume', audio.volume).addClass('enable');
+//          setVolume(0);
+//      }
+//  });
 
-// 	// Switch track
-// 	var switchTrack = function(i){
-// 		if (i < 0){
-// 			track = currentTrack = playlist.length - 1;
-// 		} else if (i >= playlist.length){
-// 			track = currentTrack = 0;
-// 		} else {
-// 			track = i;
-// 		}
+//  // Switch track
+//  var switchTrack = function(i){
+//      if (i < 0){
+//          track = currentTrack = playlist.length - 1;
+//      } else if (i >= playlist.length){
+//          track = currentTrack = 0;
+//      } else {
+//          track = i;
+//      }
 
-// 		$('audio').remove();
-// 		loadMusic(track);
-// 		if (isPlaying == true) play();
-// 	}
+//      $('audio').remove();
+//      loadMusic(track);
+//      if (isPlaying == true) play();
+//  }
 
-// 	// Shuffle
-// 	var shufflePlay = function(){
-// 		var time = new Date(),
-// 			lastTrack = currentTrack;
-// 		currentTrack = time.getTime() % playlist.length;
-// 		if (lastTrack == currentTrack) ++currentTrack;
-// 		switchTrack(currentTrack);
-// 	}
+//  // Shuffle
+//  var shufflePlay = function(){
+//      var time = new Date(),
+//          lastTrack = currentTrack;
+//      currentTrack = time.getTime() % playlist.length;
+//      if (lastTrack == currentTrack) ++currentTrack;
+//      switchTrack(currentTrack);
+//  }
 
-// 	// Fire when track ended
-// 	var ended = function(){
-// 		pause();
-// 		audio.currentTime = 0;
-// 		playCounts++;
-// 		if (continous == true) isPlaying = true;
-// 		if (repeat == 1){
-// 			play();
-// 		} else {
-// 			if (shuffle === 'true'){
-// 				shufflePlay();
-// 			} else {
-// 				if (repeat == 2){
-// 					switchTrack(++currentTrack);
-// 				} else {
-// 					if (currentTrack < playlist.length) switchTrack(++currentTrack);
-// 				}
-// 			}
-// 		}
-// 	}
+//  // Fire when track ended
+//  var ended = function(){
+//      pause();
+//      audio.currentTime = 0;
+//      playCounts++;
+//      if (continous == true) isPlaying = true;
+//      if (repeat == 1){
+//          play();
+//      } else {
+//          if (shuffle === 'true'){
+//              shufflePlay();
+//          } else {
+//              if (repeat == 2){
+//                  switchTrack(++currentTrack);
+//              } else {
+//                  if (currentTrack < playlist.length) switchTrack(++currentTrack);
+//              }
+//          }
+//      }
+//  }
 
-// 	var beforeLoad = function(){
-// 		var endVal = this.seekable && this.seekable.length ? this.seekable.end(0) : 0;
-// 		$('.progress .loaded').css('width', (100 / (this.duration || 1) * endVal) +'%');
-// 	}
+//  var beforeLoad = function(){
+//      var endVal = this.seekable && this.seekable.length ? this.seekable.end(0) : 0;
+//      $('.progress .loaded').css('width', (100 / (this.duration || 1) * endVal) +'%');
+//  }
 
-// 	// Fire when track loaded completely
-// 	var afterLoad = function(){
-// 		if (autoplay == true) play();
-// 	}
+//  // Fire when track loaded completely
+//  var afterLoad = function(){
+//      if (autoplay == true) play();
+//  }
 
-// 	// Load track
-// 	var loadMusic = function(i){
-// 		var item = playlist[i],
-// 			newaudio = $('<audio>').html('<source src="'+item.mp3+'"><source src="'+item.ogg+'">').appendTo('#player');
-		
-// 		$('.cover').html('<img src="'+item.cover+'" alt="'+item.album+'">');
-// 		$('.tag').html('<strong>'+item.title+'</strong><span class="artist">'+item.artist+'</span><span class="album">'+item.album+'</span>');
-// 		$('#playlist li').removeClass('playing').eq(i).addClass('playing');
-// 		audio = newaudio[0];
-// 		audio.volume = $('.mute').hasClass('enable') ? 0 : volume;
-// 		audio.addEventListener('progress', beforeLoad, false);
-// 		audio.addEventListener('durationchange', beforeLoad, false);
-// 		audio.addEventListener('canplay', afterLoad, false);
-// 		audio.addEventListener('ended', ended, false);
-// 	}
+//  // Load track
+//  var loadMusic = function(i){
+//      var item = playlist[i],
+//          newaudio = $('<audio>').html('<source src="'+item.mp3+'"><source src="'+item.ogg+'">').appendTo('#player');
+        
+//      $('.cover').html('<img src="'+item.cover+'" alt="'+item.album+'">');
+//      $('.tag').html('<strong>'+item.title+'</strong><span class="artist">'+item.artist+'</span><span class="album">'+item.album+'</span>');
+//      $('#playlist li').removeClass('playing').eq(i).addClass('playing');
+//      audio = newaudio[0];
+//      audio.volume = $('.mute').hasClass('enable') ? 0 : volume;
+//      audio.addEventListener('progress', beforeLoad, false);
+//      audio.addEventListener('durationchange', beforeLoad, false);
+//      audio.addEventListener('canplay', afterLoad, false);
+//      audio.addEventListener('ended', ended, false);
+//  }
 
-// 	loadMusic(currentTrack);
-// 	$('.playback').on('click', function(){
-// 		if ($(this).hasClass('playing')){
-// 			pause();
-// 		} else {
-// 			play();
-// 		}
-// 	});
-// 	$('.rewind').on('click', function(){
-// 		if (shuffle === 'true'){
-// 			shufflePlay();
-// 		} else {
-// 			switchTrack(--currentTrack);
-// 		}
-// 	});
-// 	$('.fastforward').on('click', function(){
-// 		if (shuffle === 'true'){
-// 			shufflePlay();
-// 		} else {
-// 			switchTrack(++currentTrack);
-// 		}
-// 	});
-// 	$('#playlist li').each(function(i){
-// 		var _i = i;
-// 		$(this).on('click', function(){
-// 			switchTrack(_i);
-// 		});
-// 	});
+//  loadMusic(currentTrack);
+//  $('.playback').on('click', function(){
+//      if ($(this).hasClass('playing')){
+//          pause();
+//      } else {
+//          play();
+//      }
+//  });
+//  $('.rewind').on('click', function(){
+//      if (shuffle === 'true'){
+//          shufflePlay();
+//      } else {
+//          switchTrack(--currentTrack);
+//      }
+//  });
+//  $('.fastforward').on('click', function(){
+//      if (shuffle === 'true'){
+//          shufflePlay();
+//      } else {
+//          switchTrack(++currentTrack);
+//      }
+//  });
+//  $('#playlist li').each(function(i){
+//      var _i = i;
+//      $(this).on('click', function(){
+//          switchTrack(_i);
+//      });
+//  });
 
-// 	if (shuffle === 'true') $('.shuffle').addClass('enable');
-// 	if (repeat == 1){
-// 		$('.repeat').addClass('once');
-// 	} else if (repeat == 2){
-// 		$('.repeat').addClass('all');
-// 	}
+//  if (shuffle === 'true') $('.shuffle').addClass('enable');
+//  if (repeat == 1){
+//      $('.repeat').addClass('once');
+//  } else if (repeat == 2){
+//      $('.repeat').addClass('all');
+//  }
 
-// 	$('.repeat').on('click', function(){
-// 		if ($(this).hasClass('once')){
-// 			repeat = localStorage.repeat = 2;
-// 			$(this).removeClass('once').addClass('all');
-// 		} else if ($(this).hasClass('all')){
-// 			repeat = localStorage.repeat = 0;
-// 			$(this).removeClass('all');
-// 		} else {
-// 			repeat = localStorage.repeat = 1;
-// 			$(this).addClass('once');
-// 		}
-// 	});
+//  $('.repeat').on('click', function(){
+//      if ($(this).hasClass('once')){
+//          repeat = localStorage.repeat = 2;
+//          $(this).removeClass('once').addClass('all');
+//      } else if ($(this).hasClass('all')){
+//          repeat = localStorage.repeat = 0;
+//          $(this).removeClass('all');
+//      } else {
+//          repeat = localStorage.repeat = 1;
+//          $(this).addClass('once');
+//      }
+//  });
 
-// 	$('.shuffle').on('click', function(){
-// 		if ($(this).hasClass('enable')){
-// 			shuffle = localStorage.shuffle = 'false';
-// 			$(this).removeClass('enable');
-// 		} else {
-// 			shuffle = localStorage.shuffle = 'true';
-// 			$(this).addClass('enable');
-// 		}
-// 	});
+//  $('.shuffle').on('click', function(){
+//      if ($(this).hasClass('enable')){
+//          shuffle = localStorage.shuffle = 'false';
+//          $(this).removeClass('enable');
+//      } else {
+//          shuffle = localStorage.shuffle = 'true';
+//          $(this).addClass('enable');
+//      }
+//  });
+// })(jQuery);
+//  });
+
+//  $('.shuffle').on('click', function(){
+//      if ($(this).hasClass('enable')){
+//          shuffle = localStorage.shuffle = 'false';
+//          $(this).removeClass('enable');
+//      } else {
+//          shuffle = localStorage.shuffle = 'true';
+//          $(this).addClass('enable');
+//      }
+//  });
 // })(jQuery);

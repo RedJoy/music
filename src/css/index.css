@@ -749,7 +749,7 @@ header .header-wrap{
 
 .panel{
 	background: #fff;
-	overflow: hidden;
+	/*overflow: hidden;*/
 	padding-top:70px;
 	box-sizing: border-box;
 } 
@@ -782,7 +782,24 @@ header .header-wrap{
 	-ms-transform: translateY(-300%);
 	transform: translateY(-300%);
 }
-
+/*列表翻页*/
+.panel .list-pre,
+.panel .list-nxt{
+	display: none;
+	position: absolute;
+	color:#be0b0b;
+	font-weight: bold;
+	font-size: 72px;
+	font-family: '幼圆';
+	top:50%;
+	cursor: pointer;
+}
+.panel .list-pre{
+	left:-150px;
+}
+.panel .list-nxt{
+	right:-150px;
+}
 /*发现音乐列表  start*/
 
 #music_list{
@@ -1050,6 +1067,7 @@ figure span {
 
 /*我的音乐列表  start*/
 .my_music{
+	position: relative;
 	box-shadow: -2px 2px 2px #eee,
 				2px 2px 2px #eee;
 	margin:0 auto;
@@ -1060,13 +1078,13 @@ figure span {
 	text-align: center;
 }
 .my_music .no-login h4{
-	font-size: 18px;
+	font-size: 16px;
 	font-weight: normal;
 	line-height: 100px;
 }
 .my_music .no-login img{
-	width: 400px;
-	height: 400px;
+	width: 300px;
+	height: 300px;
 	border-radius: 50%;
 	display: inline-block;
 }
@@ -1155,6 +1173,7 @@ figure span {
 
 /*我的收藏列表 start*/
 .my_collect{
+	position: relative;
 	box-shadow: -2px 2px 2px #eee,
 				2px 2px 2px #eee;
 	margin:0 auto;
@@ -1223,7 +1242,7 @@ figure span {
 .my_collect .play:hover{
     background-position: 0 -128px;
 }
-.my_collect .collect{
+.my_collect .add{
 	position: relative;
     left: 15px;
     top:1px;
@@ -1233,7 +1252,7 @@ figure span {
     background: url('../imgs/table.png');
     background-position: 0 -174px;
 }
-.my_collect .collect:hover{
+.my_collect .add:hover{
 	background-position: -20px -174px;
 }
 .my_collect .del{

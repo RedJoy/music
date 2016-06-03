@@ -34,7 +34,7 @@ class Collect extends RJ_Controller {
 
         # collected ?
         $collected = $this->collect->get_by($data);
-        if ($collected) $this->response('Already Collected!', 400);
+        if ($collected) $this->response('Already Collected!', 200);
 
         # add to collects
         $collect_id = $this->collect->insert($data, TRUE);
