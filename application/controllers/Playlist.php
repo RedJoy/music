@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Playlist extends CI_Controller {
+class Playlist extends RJ_Controller {
     
     public function __construct () 
     {
@@ -23,26 +23,14 @@ class Playlist extends CI_Controller {
     // Get Playlist/songs
     public function songs() 
     {
-        // $songs = $this->playlist->getSongs($id);
         $lista = $this->playlist->getSongs(1);
         $listb = $this->playlist->getSongs(2);
         $listc = $this->playlist->getSongs(3);
         $listd = $this->playlist->getSongs(4);
         $liste = $this->playlist->getSongs(5);
-        $songs =array(
-            $lista, 
-            $listb, 
-            $listc, 
-            $listd,
-            $liste,
-        );
+        
+        $songs =array($lista, $listb, $listc, $listd, $liste);
         $this->response($songs);
-    }
-
-    private function response ($data) 
-    {
-        echo json_encode($data);
-        return TRUE;
     }
     
 }
